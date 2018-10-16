@@ -823,8 +823,10 @@ union rcu_special {
 	struct {
 		u8			blocked;
 		u8			need_qs;
+		u8			exp_hint; /* Hint for performance. */
+		u8			pad; /* No garbage from compiler! */
 	} b; /* Bits. */
-	u16 s; /* Set of bits. */
+	u32 s; /* Set of bits. */
 };
 
 #ifdef CONFIG_OPLUS_FEATURE_RT_INFO
