@@ -228,7 +228,7 @@ static long get_mem_usage_pages(enum mem_type type)
 	int ret = 0;
 	switch(type) {
 	case MEM_TOTAL:
-		return totalram_pages;
+		return totalram_pages();
 	case MEM_FREE:
 		ret = global_zone_page_state(NR_FREE_PAGES);
 		break;
@@ -805,12 +805,12 @@ static __init int oplus_lowmem_dbg_init(void)
 
 	/* init watermark */
 	pcfg->wms[MEM_ION_USED] = SZ_2G >> PAGE_SHIFT;
-	pcfg->wms[MEM_ANON] = totalram_pages / 2;
+	pcfg->wms[MEM_ANON] = totalram_pages() / 2;
 	pcfg->wms[MEM_SLAB_UNRECLAIMABLE] = SZ_1G >> PAGE_SHIFT;
 	pcfg->wms[MEM_GPU] = SZ_2G >> PAGE_SHIFT;
 	pcfg->wm_low = lowmem_dbg_low[0];
 	for (i = ARRAY_SIZE(lowmem_dbg_ram) - 1; i >= 0; i--) {
-		if (totalram_pages >= lowmem_dbg_ram[i]) {
+		if (totalram_pages() >= lowmem_dbg_ram[i]) {
 			pcfg->wm_low = lowmem_dbg_low[i];
 			break;
 		}
