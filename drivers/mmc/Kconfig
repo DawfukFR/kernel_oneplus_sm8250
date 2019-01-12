@@ -25,3 +25,14 @@ config EMMC_SDCARD_OPTIMIZE
 	  emmc sdcard optimize.
 
 endif # MMC
+
+if !MMC
+
+config BOGUS_MMC
+	bool "Bogus MMC sysfs"
+	help
+	  This module exposes a bogus sysfs entry:
+	  /sys/class/mmc_host/mmc0/clk_scaling/enable,
+	  in order for perfd to operate properly.
+
+endif # !MMC
