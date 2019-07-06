@@ -2249,6 +2249,9 @@ static int fill_cmi_header(struct cmi_hdr *hdr,
 		return -EINVAL;
 	}
 
+	// Explicitly initialize hdr
+	memset(hdr, 0, sizeof(struct cmi_hdr));
+
 	CMI_HDR_SET_SESSION(hdr, session_id);
 	CMI_HDR_SET_SERVICE(hdr, service_id);
 	if (version)
