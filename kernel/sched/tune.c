@@ -138,6 +138,10 @@ struct schedtune {
 	 * the value when Dynamic SchedTune Boost is reset.
 	 */
 	int boost_default;
+	
+	int boost_cur;
+	bool is_boosting;
+	struct work_struct dsb_work;
 #endif /* CONFIG_DYNAMIC_STUNE_BOOST */
 };
 
@@ -186,6 +190,8 @@ root_schedtune = {
 	
 #ifdef CONFIG_DYNAMIC_STUNE_BOOST
 	.boost_default = 0,
+	.boost_cur = 0,
+	.is_boosting = false,
 #endif /* CONFIG_DYNAMIC_STUNE_BOOST */
 };
 
@@ -949,6 +955,8 @@ static struct cftype files[] = {
 	{ }	/* terminate */
 };
 
+static void dsb_worker(struct work_struct *work);
+
 static void
 schedtune_boostgroup_init(struct schedtune *st, int idx)
 {
@@ -966,6 +974,8 @@ schedtune_boostgroup_init(struct schedtune *st, int idx)
 	/* Keep track of allocated boost groups */
 	allocated_group[idx] = st;
 	st->idx = idx;
+	
+	INIT_WORK(&st->dsb_work, dsb_worker);
 }
 
 #ifdef CONFIG_STUNE_ASSIST
@@ -1143,28 +1153,24 @@ static int dynamic_boost(struct schedtune *st, int boost)
 	return ret;
 }
 
-static int _do_stune_boost(struct schedtune *st, int boost)
+static int _do_stune_boost(struct schedtune *st)
 {
 	int ret = 0;
 
 	mutex_lock(&stune_boost_mutex);
 
 	/* Boost if new value is greater than current */
-	if (boost > st->boost)
-		ret = dynamic_boost(st, boost);
+	if (st->boost_cur > st->boost)
+		ret = dynamic_boost(st, st->boost_cur);
 
 	mutex_unlock(&stune_boost_mutex);
 
 	return ret;
 }
 
-int reset_stune_boost(char *st_name)
+static int _reset_stune_boost(struct schedtune *st)
 {
 	int ret = 0;
-	struct schedtune *st = getSchedtune(st_name);
-
-	if (!st)
-		return -EINVAL;
 
 	mutex_lock(&stune_boost_mutex);
 	ret = dynamic_boost(st, st->boost_default);
@@ -1173,14 +1179,38 @@ int reset_stune_boost(char *st_name)
 	return ret;
 }
 
-int do_stune_boost(char *st_name, int boost)
+static void dsb_worker(struct work_struct *work)
+{
+	struct schedtune *st = container_of(work, struct schedtune, dsb_work);
+	
+	if(st->is_boosting)
+		_do_stune_boost(st);
+	else
+		_reset_stune_boost(st);
+
+}
+
+void reset_stune_boost(char *st_name)
 {
 	struct schedtune *st = getSchedtune(st_name);
 
-	if (!st)
-		return -EINVAL;
+	if (likely(st->is_boosting) && likely(st)) {
+		st->is_boosting = false;
 
-	return _do_stune_boost(st, boost);
+		schedule_work(&st->dsb_work);
+	}
+}
+
+void do_stune_boost(char *st_name, int boost)
+{
+	struct schedtune *st = getSchedtune(st_name);
+
+	if (likely(!st->is_boosting) && likely(st)) {
+		st->boost_cur = boost;
+		st->is_boosting = true;
+
+		schedule_work(&st->dsb_work);
+	}
 }
 
 #endif /* CONFIG_DYNAMIC_STUNE_BOOST */
