@@ -148,17 +148,14 @@ static int rmnet_shs_dev_notify_cb(struct notifier_block *nb,
 
 			rmnet_shs_cfg.dl_mrk_ind_cb.priority =
 				RMNET_SHS;
-			if (port->data_format & RMNET_INGRESS_FORMAT_DL_MARKER_V2) {
-				rmnet_shs_cfg.dl_mrk_ind_cb.dl_hdr_handler_v2 =
-					&rmnet_shs_dl_hdr_handler_v2;
-				rmnet_shs_cfg.dl_mrk_ind_cb.dl_trl_handler_v2 =
-					&rmnet_shs_dl_trl_handler_v2;
-			} else {
-				rmnet_shs_cfg.dl_mrk_ind_cb.dl_hdr_handler =
-					&rmnet_shs_dl_hdr_handler;
-				rmnet_shs_cfg.dl_mrk_ind_cb.dl_trl_handler =
-					&rmnet_shs_dl_trl_handler;
-			}
+			rmnet_shs_cfg.dl_mrk_ind_cb.dl_hdr_handler_v2 =
+				&rmnet_shs_dl_hdr_handler_v2;
+			rmnet_shs_cfg.dl_mrk_ind_cb.dl_trl_handler_v2 =
+				&rmnet_shs_dl_trl_handler_v2;
+			rmnet_shs_cfg.dl_mrk_ind_cb.dl_hdr_handler =
+				&rmnet_shs_dl_hdr_handler;
+			rmnet_shs_cfg.dl_mrk_ind_cb.dl_trl_handler =
+				&rmnet_shs_dl_trl_handler;
 			rmnet_shs_cfg.rmnet_idl_ind_cb.ps_on_handler =
 					&rmnet_shs_ps_on_hdlr;
 			rmnet_shs_cfg.rmnet_idl_ind_cb.ps_off_handler =
