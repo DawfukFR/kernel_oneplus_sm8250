@@ -100,9 +100,10 @@ static inline int validate_pkt_size(u32 rem_size, u32 msg_size)
 }
 
 static int hfi_process_sess_evt_seq_changed(u32 device_id,
-		struct hfi_msg_event_notify_packet *pkt,
+		void *_pkt,
 		struct msm_vidc_cb_info *info)
 {
+	struct hfi_msg_event_notify_packet *pkt = _pkt;
 	struct msm_vidc_cb_event event_notify = {0};
 	u32 num_properties_changed;
 	struct hfi_frame_size *frame_sz;
@@ -321,9 +322,10 @@ static int hfi_process_sess_evt_seq_changed(u32 device_id,
 }
 
 static int hfi_process_evt_release_buffer_ref(u32 device_id,
-		struct hfi_msg_event_notify_packet *pkt,
+		void *_pkt,
 		struct msm_vidc_cb_info *info)
 {
+	struct hfi_msg_event_notify_packet *pkt = _pkt;
 	struct msm_vidc_cb_event event_notify = {0};
 	struct hfi_msg_release_buffer_ref_event_packet *data;
 
@@ -357,9 +359,10 @@ static int hfi_process_evt_release_buffer_ref(u32 device_id,
 }
 
 static int hfi_process_sys_error(u32 device_id,
-	struct hfi_msg_event_notify_packet *pkt,
+	void *_pkt,
 	struct msm_vidc_cb_info *info)
 {
+	struct hfi_msg_event_notify_packet *pkt = _pkt;
 	struct msm_vidc_cb_cmd_done cmd_done = {0};
 
 	cmd_done.device_id = device_id;
@@ -372,9 +375,10 @@ static int hfi_process_sys_error(u32 device_id,
 }
 
 static int hfi_process_session_error(u32 device_id,
-		struct hfi_msg_event_notify_packet *pkt,
+		void *_pkt,
 		struct msm_vidc_cb_info *info)
 {
+	struct hfi_msg_event_notify_packet *pkt = _pkt;
 	struct msm_vidc_cb_cmd_done cmd_done = {0};
 	u32 sid = pkt->sid;
 
@@ -1105,9 +1109,9 @@ static int hfi_process_session_abort_done(u32 device_id,
 	return 0;
 }
 
-static void hfi_process_sys_get_prop_image_version(
-		struct hfi_msg_sys_property_info_packet *pkt)
+static void hfi_process_sys_get_prop_image_version(void *_pkt)
 {
+	struct hfi_msg_sys_property_info_packet *pkt = _pkt;
 	u32 i = 0;
 	size_t smem_block_size = 0;
 	u8 *smem_table_ptr;
