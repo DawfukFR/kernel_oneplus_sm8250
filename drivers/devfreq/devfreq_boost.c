@@ -11,6 +11,10 @@
 #include <linux/kthread.h>
 #include <linux/slab.h>
 #include <uapi/linux/sched/types.h>
+#include <linux/module.h>
+
+static bool disable_boosts __read_mostly;
+module_param(disable_boosts, bool, 0644);
 
 #ifndef CONFIG_CPU_INPUT_BOOST
 	unsigned long last_input_time;
@@ -74,6 +78,9 @@ static void __devfreq_boost_kick(struct boost_dev *b)
 void devfreq_boost_kick(enum df_device device)
 {
 	struct df_boost_drv *d = &df_boost_drv_g;
+	
+	if (disable_boosts)
+		return;
 
 	__devfreq_boost_kick(&d->devices[device]);
 }
@@ -109,6 +116,9 @@ static void __devfreq_boost_kick_max(struct boost_dev *b,
 void devfreq_boost_kick_max(enum df_device device, unsigned int duration_ms)
 {
 	struct df_boost_drv *d = &df_boost_drv_g;
+	
+	if (disable_boosts)
+		return;
 
 	__devfreq_boost_kick_max(&d->devices[device], duration_ms);
 }
