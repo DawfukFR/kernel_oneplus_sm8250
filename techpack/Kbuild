@@ -1,7 +1,2 @@
-# SPDX-License-Identifier: GPL-2.0-only
-TECHPACK?=y
-
-techpack-dirs := $(shell find $(srctree)/techpack -maxdepth 1 -mindepth 1 -type d -not -name ".*")
-techpack-dirs := $(filter-out $(srctree)/techpack/data,$(techpack-dirs))
-obj-${TECHPACK} += stub/ $(addsuffix /,$(subst $(srctree)/techpack/,,$(techpack-dirs)))
-header-${TECHPACK} += $(addsuffix /include/uapi/,$(subst $(srctree)/techpack/,,$(techpack-dirs)))
+obj-y += stub/ audio/ camera/
+header-y += stub/include/uapi/ audio/include/uapi/ camera/include/uapi/

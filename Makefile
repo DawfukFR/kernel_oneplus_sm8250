@@ -621,7 +621,7 @@ export KBUILD_MODULES KBUILD_BUILTIN
 ifeq ($(KBUILD_EXTMOD),)
 # Objects we will link into vmlinux / subdirs we need to visit
 init-y		:= init/
-drivers-y	:= drivers/ sound/ firmware/ techpack/ techpack/data/drivers/
+drivers-y	:= drivers/ sound/ firmware/ techpack/ techpack/data/drivers/ techpack/display/ techpack/video/
 net-y		:= net/
 libs-y		:= lib/
 core-y		:= usr/
@@ -1408,6 +1408,7 @@ headers_install: __headers
 	$(Q)$(MAKE) $(hdr-inst)=include/uapi dst=include
 	$(Q)$(MAKE) $(hdr-inst)=arch/$(SRCARCH)/include/uapi $(hdr-dst)
 	$(Q)$(MAKE) $(hdr-inst)=techpack/audio/include/uapi dst=techpack/audio/include
+	$(Q)$(MAKE) $(hdr-inst)=techpack/camera/include/uapi dst=techpack/camera/include
 
 PHONY += headers_check_all
 headers_check_all: headers_install_all
@@ -1418,6 +1419,7 @@ headers_check: headers_install
 	$(Q)$(MAKE) $(hdr-inst)=include/uapi dst=include HDRCHECK=1
 	$(Q)$(MAKE) $(hdr-inst)=arch/$(SRCARCH)/include/uapi $(hdr-dst) HDRCHECK=1
 	$(Q)$(MAKE) $(hdr-inst)=techpack/audio/include/uapi dst=techpack/audio/include HDRCHECK=1
+	$(Q)$(MAKE) $(hdr-inst)=techpack/camera/include/uapi dst=techpack/camera/include HDRCHECK=1
 
 # ---------------------------------------------------------------------------
 # Kernel selftest
