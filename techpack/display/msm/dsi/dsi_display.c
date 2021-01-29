@@ -7276,20 +7276,20 @@ int dsi_display_set_mode(struct dsi_display *display,
 
 #ifdef OPLUS_FEATURE_ADFR
 	if (oplus_adfr_is_support()) {
-		DSI_INFO("mdp_transfer_time=%d, hactive=%d, vactive=%d, fps=%d, h_skew=%d\n",
+		DSI_DEBUG("mdp_transfer_time=%d, hactive=%d, vactive=%d, fps=%d, h_skew=%d\n",
 				adj_mode.priv_info->mdp_transfer_time_us,
 				timing.h_active, timing.v_active, timing.refresh_rate, timing.h_skew);
 	} else {
-		DSI_INFO("mdp_transfer_time_us=%d us\n",
+		DSI_DEBUG("mdp_transfer_time_us=%d us\n",
 				adj_mode.priv_info->mdp_transfer_time_us);
-		DSI_INFO("hactive= %d,vactive= %d,fps=%d\n",
+		DSI_DEBUG("hactive= %d,vactive= %d,fps=%d\n",
 				timing.h_active, timing.v_active,
 				timing.refresh_rate);
 	}
 #else
-	DSI_INFO("mdp_transfer_time_us=%d us\n",
+	DSI_DEBUG("mdp_transfer_time_us=%d us\n",
 			adj_mode.priv_info->mdp_transfer_time_us);
-	DSI_INFO("hactive= %d,vactive= %d,fps=%d\n",
+	DSI_DEBUG("hactive= %d,vactive= %d,fps=%d\n",
 			timing.h_active, timing.v_active,
 			timing.refresh_rate);
 #endif /* OPLUS_FEATURE_ADFR */
