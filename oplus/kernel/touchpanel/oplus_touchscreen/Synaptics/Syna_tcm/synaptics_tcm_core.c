@@ -3962,7 +3962,7 @@ static void __exit syna_tcm_module_exit(void)
     return;
 }
 
-module_init(syna_tcm_module_init);
+device_initcall_sync(syna_tcm_module_init);
 module_exit(syna_tcm_module_exit);
 
 MODULE_AUTHOR("Synaptics, Inc.");

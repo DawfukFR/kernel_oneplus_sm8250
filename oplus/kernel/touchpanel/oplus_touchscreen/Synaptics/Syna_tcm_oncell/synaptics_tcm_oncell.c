@@ -5584,7 +5584,7 @@ static void __exit syna_tcm_module_exit(void)
 }
 
 #ifdef CONFIG_TOUCHPANEL_LATE_INIT
-late_initcall(syna_tcm_module_init);
+device_initcall_sync(syna_tcm_module_init);
 #else
 module_init(syna_tcm_module_init);
 #endif
