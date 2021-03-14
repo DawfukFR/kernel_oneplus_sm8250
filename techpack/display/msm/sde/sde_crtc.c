@@ -1413,6 +1413,7 @@ static void _sde_crtc_blend_setup_mixer(struct drm_crtc *crtc,
 	lm = mixer->hw_lm;
 	stage_cfg = &sde_crtc->stage_cfg;
 	cstate = to_sde_crtc_state(crtc->state);
+	memset(pstates, 0, SDE_PSTATES_MAX * sizeof(struct plane_state));
 
 	drm_atomic_crtc_for_each_plane(plane, crtc) {
 		state = plane->state;
