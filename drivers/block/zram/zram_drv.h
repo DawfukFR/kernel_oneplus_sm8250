@@ -61,6 +61,7 @@ enum zram_pageflags {
 	ZRAM_MCGID_CLEAR,
 	ZRAM_IN_BD, /* zram stored in back device */
 #endif
+	ZRAM_DEDUPED,	/* Deduplicated with existing entry */
 	__NR_ZRAM_PAGEFLAGS,
 };
 
