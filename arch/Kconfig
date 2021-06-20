@@ -1025,7 +1025,7 @@ config ARCH_HAS_RELR
 	bool
 
 config RELR
-	bool "Use RELR relocation packing"
+	bool
 	depends on ARCH_HAS_RELR && TOOLS_SUPPORT_RELR
 	default y
 	help
