@@ -1019,6 +1019,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
 		}
 
 		ret = gi2c->err;
+		gi2c->err = 0;
 #ifdef OPLUS_FEATURE_CHG_BASIC
 		if(msgs[i].addr == FG_DEVICE_ADDR || msgs[i].addr == DA9313_DEVICE_ADDR) {
 			if (gi2c->err) {
