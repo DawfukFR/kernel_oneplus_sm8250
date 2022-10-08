@@ -4315,12 +4315,16 @@ static int aw8697_i2c_read(struct aw8697 *aw8697,
 static int aw8697_i2c_write_bits(struct aw8697 *aw8697,
          unsigned char reg_addr, unsigned int mask, unsigned char reg_data)
 {
-    unsigned char reg_val = 0;
+    unsigned char oval = 0;
+    unsigned char nval;
 
-    aw8697_i2c_read(aw8697, reg_addr, &reg_val);
-    reg_val &= mask;
-    reg_val |= reg_data;
-    aw8697_i2c_write(aw8697, reg_addr, reg_val);
+    aw8697_i2c_read(aw8697, reg_addr, &oval);
+    nval = oval;
+    nval &= mask;
+    nval |= reg_data;
+    if (oval != nval) {
+        aw8697_i2c_write(aw8697, reg_addr, nval);
+    }
 
     return 0;
 }
