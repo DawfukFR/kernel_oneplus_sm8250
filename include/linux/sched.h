@@ -1643,6 +1643,12 @@ struct task_struct {
 	ANDROID_KABI_USE(1, unsigned frozen:1);
 
 	/*
+	 * User pointer to hwui DrawFrameTask::mFrameInfo.
+	 * (used by hwui monitor)
+	 */
+	s64 __user *ui_frame_info;
+
+	/*
 	 * New fields for task_struct should be added above here, so that
 	 * they are included in the randomized portion of task_struct.
 	 */
