@@ -135,3 +135,20 @@ all.config
 
 # fetched Android config fragments
 kernel/configs/android-*.cfg
+
+# Personnal scripts
+build.sh
+regen.sh
+error.log
+
+# Output
+out/
+
+# AnyKernel3
+AnyKernel3/
+
+# Clang / GCC / AOSP-clang
+clang/
+gcc/
+gcc32/
+clangB/
