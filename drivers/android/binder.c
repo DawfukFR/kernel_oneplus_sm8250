@@ -85,10 +85,6 @@
 #include <linux/hans.h>
 #endif /*OPLUS_FEATURE_HANS_FREEZE*/
 
-#if IS_ENABLED(CONFIG_OPLUS_FEATURE_CPU_JANKINFO)
-#include <linux/cpu_jankinfo/jank_tasktrack.h>
-#endif
-
 static HLIST_HEAD(binder_deferred_list);
 static DEFINE_MUTEX(binder_deferred_lock);
 
@@ -147,9 +143,7 @@ static int binder_stop_on_user_error;
 #if defined(CONFIG_OPLUS_FEATURE_BINDER_STATS_ENABLE)
 
 #include <linux/notifier.h>
-#ifndef CONFIG_OPLUS_FEATURE_CPU_JANKINFO
 #define OPLUS_MAX_SERVICE_NAME_LEN    32
-#endif
 #define OPLUS_MAGIC_SERVICE_NAME_OFFSET 76
 
 struct binder_notify {
@@ -227,7 +221,6 @@ static inline void binder_user_error(const char *fmt, ...)
 #define to_binder_fd_array_object(hdr) \
 	container_of(hdr, struct binder_fd_array_object, hdr)
 
-#ifndef CONFIG_OPLUS_FEATURE_CPU_JANKINFO
 enum binder_stat_types {
 	BINDER_STAT_PROC,
 	BINDER_STAT_THREAD,
@@ -245,7 +238,6 @@ struct binder_stats {
 	atomic_t obj_created[BINDER_STAT_COUNT];
 	atomic_t obj_deleted[BINDER_STAT_COUNT];
 };
-#endif
 
 static struct binder_stats binder_stats;
 
@@ -282,7 +274,6 @@ static struct binder_transaction_log_entry *binder_transaction_log_add(
 	return e;
 }
 
-#ifndef CONFIG_OPLUS_FEATURE_CPU_JANKINFO
 /**
  * struct binder_work - work enqueued on a worklist
  * @entry:             node enqueued on list
@@ -659,7 +650,6 @@ struct binder_thread {
 	bool is_dead;
 	struct task_struct *task;
 };
-#endif
 
 struct binder_transaction {
 	int debug_id;
@@ -4701,10 +4691,6 @@ static int binder_wait_for_work(struct binder_thread *thread,
 		if (do_proc_work)
 			list_add(&thread->waiting_thread_node,
 				 &proc->waiting_threads);
-#if IS_ENABLED(CONFIG_OPLUS_FEATURE_CPU_JANKINFO)
-		android_vh_binder_wait_for_work_hanlder(NULL,
-			do_proc_work, thread, proc);
-#endif
 		binder_inner_proc_unlock(proc);
 #ifdef OPLUS_FEATURE_HEALTHINFO
 #ifdef CONFIG_OPLUS_JANK_INFO
