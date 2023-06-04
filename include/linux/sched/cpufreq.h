@@ -17,11 +17,6 @@
 #define SCHED_CPUFREQ_CONTINUE (1U << 8)
 #define SCHED_CPUFREQ_SKIP_LIMITS (1U << 11)
 
-#ifdef OPLUS_FEATURE_SCHED_ASSIST
-#define SCHED_CPUFREQ_RESET (1U << 7)
-#define SCHED_CPUFREQ_BOOST (1U << 9)
-#endif /* OPLUS_FEATURE_SCHED_ASSIST */
-
 #ifdef CONFIG_CPU_FREQ
 struct cpufreq_policy;
 
