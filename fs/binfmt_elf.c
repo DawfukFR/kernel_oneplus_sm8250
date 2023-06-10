@@ -2438,10 +2438,6 @@ cleanup:
 	free_note_info(&info);
 	kfree(shdr4extnum);
 	kvfree(vma_filesz);
-#ifdef OPLUS_BUG_STABILITY
-	if (vma_filesz == oplus_coredump_addr)
-		oplus_coredump_addr = NULL;
-#endif /* OPLUS_BUG_STABILITY */
 	kfree(phdr4note);
 	kfree(elf);
 out:
@@ -2455,20 +2451,11 @@ static int __init init_elf_binfmt(void)
 {
 	register_binfmt(&elf_format);
 
-#ifdef OPLUS_BUG_STABILITY
-	oplus_coredump_addr = kvmalloc(PREALLOC_DUMPMEM_SIZE, GFP_KERNEL);
-#endif /* OPLUS_BUG_STABILITY */
-
 	return 0;
 }
 
 static void __exit exit_elf_binfmt(void)
 {
-#ifdef OPLUS_BUG_STABILITY
-	if (oplus_coredump_addr)
-		kvfree(oplus_coredump_addr);
-#endif /* OPLUS_BUG_STABILITY */
-
 	/* Remove the COFF and ELF loaders. */
 	unregister_binfmt(&elf_format);
 }
