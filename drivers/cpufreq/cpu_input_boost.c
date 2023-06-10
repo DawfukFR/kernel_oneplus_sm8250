@@ -407,7 +407,7 @@ static struct input_handler cpu_input_boost_input_handler = {
 	.id_table	= cpu_input_boost_ids
 };
 
-extern struct drm_panel *active_panel;
+struct drm_panel *active_panel;
 
 static int __init cpu_input_boost_init(void)
 {
