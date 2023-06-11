@@ -413,7 +413,6 @@ struct fastrpc_mmap {
 	int refs;
 	uintptr_t raddr;
 	int uncached;
-	bool is_filemap; /*flag to indicate map used in process init*/
 	int secure;
 	uintptr_t attr;
 	bool is_filemap; /* flag to indicate map used in process init */
