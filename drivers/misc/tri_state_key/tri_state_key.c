@@ -450,7 +450,7 @@ static int __init tri_state_key_init(void)
 {
 	return platform_driver_register(&tristate_dev_driver);
 }
-module_init(tri_state_key_init);
+late_initcall(tri_state_key_init);
 
 static void __exit tri_state_key_exit(void)
 {
