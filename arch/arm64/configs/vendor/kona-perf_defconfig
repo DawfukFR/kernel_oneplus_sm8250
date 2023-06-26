@@ -4,7 +4,7 @@
 #
 
 #
-# Compiler: ZyC clang version 17.0.0 (https://github.com/llvm/llvm-project cb9ac7051589ea0d05507f9370d0716bef86b4ae)
+# Compiler: ZyC clang version 17.0.0 (https://github.com/llvm/llvm-project 441afb3978ce3599b11615d1365a75e32b0fa47c)
 #
 CONFIG_OPLUS_SYSTEM_KERNEL_QCOM=y
 # CONFIG_OPLUS_SYSTEM_KERNEL_MTK is not set
@@ -697,7 +697,6 @@ CONFIG_THINLTO=y
 CONFIG_LTO_CLANG=y
 # CONFIG_CFI_CLANG is not set
 CONFIG_ARCH_SUPPORTS_SHADOW_CALL_STACK=y
-# CONFIG_SHADOW_CALL_STACK is not set
 CONFIG_HAVE_CONTEXT_TRACKING=y
 CONFIG_HAVE_VIRT_CPU_ACCOUNTING_GEN=y
 CONFIG_HAVE_IRQ_TIME_ACCOUNTING=y
