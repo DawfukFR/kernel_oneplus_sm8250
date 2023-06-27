@@ -23,7 +23,7 @@ extern int cpu_idle_pc_state[NR_CPUS];
 unsigned int smp_call_any_cpu;
 unsigned long smp_call_many_cpumask;
 int recovery_tried;
-static oplus_print_utc_cnt = 0;
+static int oplus_print_utc_cnt = 0;
 
 static const char *recoverable_procs[] = {"SearchDaemon", "libsu.so", "NotificationObs"};
 

@@ -4616,7 +4616,7 @@ int dsi_panel_drv_init(struct dsi_panel *panel,
         if (iris_is_chip_supported()) {
             if (!strcmp(panel->type, "primary"))
                 goto error_pinctrl_deinit;
-	        rc = 0;
+	        	rc = 0;
 	    } else 
 #endif
 		    goto error_pinctrl_deinit;

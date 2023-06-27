@@ -473,10 +473,10 @@ static int fsa4480_parse_dt(struct fsa4480_priv *fsa_priv,
     if (dNode == NULL)
         return -ENODEV;
 
-	if (!fsa_priv) {
-		pr_err("%s: fsa_priv is NULL\n", __func__);
-		return -ENOMEM;
-	}
+		if (!fsa_priv) {
+			pr_err("%s: fsa_priv is NULL\n", __func__);
+			return -ENOMEM;
+		}
 
 	fsa_priv->hs_det_pin = of_get_named_gpio(dNode,
 	        "fsa4480,hs-det-gpio", 0);

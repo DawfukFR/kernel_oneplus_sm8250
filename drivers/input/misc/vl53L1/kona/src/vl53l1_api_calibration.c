@@ -2559,8 +2559,8 @@ VL53L1_Error   VL53L1_run_hist_xtalk_extraction(
 	if (status != VL53L1_ERROR_NONE)
 		goto LOOPOUT;
 
-	//if (status == VL53L1_ERROR_NONE)
-		status = VL53L1_disable_xtalk_compensation(Dev);
+	status = VL53L1_disable_xtalk_compensation(Dev);
+
 	if (status != VL53L1_ERROR_NONE)
 		goto LOOPOUT;
 
@@ -2631,25 +2631,25 @@ VL53L1_Error   VL53L1_run_hist_xtalk_extraction(
 					goto LOOPOUT;
 			}
 
-			//if (status == VL53L1_ERROR_NONE)
-				status = VL53L1_wait_for_firmware_ready(Dev);
+			status = VL53L1_wait_for_firmware_ready(Dev);
+
 			if (status != VL53L1_ERROR_NONE)
 				goto LOOPOUT;
 
-			//if (status == VL53L1_ERROR_NONE)
-				status =
+			status =
 				VL53L1_clear_interrupt_and_enable_next_range(
 					Dev, measurement_mode);
+
 			if (status != VL53L1_ERROR_NONE)
 				goto LOOPOUT;
 
-			//if (status == VL53L1_ERROR_NONE)
-				status =
+			status =
 				VL53L1_hist_xtalk_extract_fini(
 					&(pdev->hist_data),
 					&(pdev->xtalk_extract),
 					&(pdev->xtalk_cal),
 					&(pdev->xtalk_shapes.xtalk_shape));
+					
 			if (status != VL53L1_ERROR_NONE)
 				goto LOOPOUT;
 			pXC->algo__xtalk_cpo_HistoMerge_kcps[k * MaxId] =

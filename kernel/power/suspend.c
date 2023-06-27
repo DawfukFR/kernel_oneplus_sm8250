@@ -642,43 +642,6 @@ static void sys_sync_work_func(struct work_struct *work)
     sys_sync_completed = true;
     wake_up(&sys_sync_wait);
 }
-
-static int sys_sync_queue(void)
-{
-    int work_status = work_busy(&sys_sync_work);
-
-    /*maybe some irq coming here before pending check*/
-    pm_wakeup_clear(true);
-
-    /*Check if the previous work still running.*/
-    if (!(work_status & WORK_BUSY_PENDING)) {
-        if (work_status & WORK_BUSY_RUNNING) {
-            while (wait_event_timeout(sys_sync_wait, sys_sync_completed,
-                        msecs_to_jiffies(100)) == 0) {
-                if (pm_wakeup_pending()) {
-                    pr_info("PM: Pre-Syncing abort\n");
-                    goto abort;
-                }
-            }
-            pr_info("PM: Pre-Syncing done\n");
-        }
-        sys_sync_completed = false;
-        schedule_work(&sys_sync_work);
-    }
-
-    while (wait_event_timeout(sys_sync_wait, sys_sync_completed,
-                    msecs_to_jiffies(100)) == 0) {
-        if (pm_wakeup_pending()) {
-            pr_info("PM: Syncing abort\n");
-            goto abort;
-        }
-    }
-
-    pr_info("PM: Syncing done\n");
-    return 0;
-abort:
-    return -EAGAIN;
-}
 #endif /*OPLUS_BUG_STABILITY*/
 
 

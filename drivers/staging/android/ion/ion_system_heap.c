@@ -964,7 +964,7 @@ struct ion_heap *ion_system_heap_create(struct ion_platform_heap *data)
 
 			/* on low memory target, we should not set 128Mib on camera pool. */
 			/* TODO set by total ram pages */
-			if (totalram_pages > (SZ_4G >> PAGE_SHIFT)) {
+			if (totalram_pages() > (SZ_4G >> PAGE_SHIFT)) {
 				cam_sz = 128 * 256;
 				uncached_sz = 64 * 256;
 			}

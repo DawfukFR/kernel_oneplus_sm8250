@@ -446,99 +446,56 @@ VL53L1_Error VL53L1_data_init(
 	pdev->bin_rec_pos = 0;
 	pdev->pos_before_next_recom = 0;
 
-
-
-
-
-
-
-
-
-
 	if (read_p2p_data > 0 && status == VL53L1_ERROR_NONE)
-
 		status = VL53L1_read_p2p_data(Dev);
 
-
-
-    if (status == VL53L1_ERROR_NONE)
+	if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_refspadchar_config_struct(
-			&(pdev->refspadchar));
-
-
+		&(pdev->refspadchar));
 
     if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_ssc_config_struct(
-			&(pdev->ssc_cfg));
-
-
-
-
+		&(pdev->ssc_cfg));
 
     if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_xtalk_config_struct(
-			&(pdev->customer),
-			&(pdev->xtalk_cfg));
-
-
-
+		&(pdev->customer),
+		&(pdev->xtalk_cfg));
 
     if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_xtalk_extract_config_struct(
-			&(pdev->xtalk_extract_cfg));
-
-
-
+		&(pdev->xtalk_extract_cfg));
 
     if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_offset_cal_config_struct(
-		    &(pdev->offsetcal_cfg));
-
-
-
+		&(pdev->offsetcal_cfg));
 
     if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_zone_cal_config_struct(
-			&(pdev->zonecal_cfg));
-
-
+		&(pdev->zonecal_cfg));
 
     if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_hist_post_process_config_struct(
-			pdev->xtalk_cfg.global_crosstalk_compensation_enable,
-			&(pdev->histpostprocess));
-
-
+		pdev->xtalk_cfg.global_crosstalk_compensation_enable,
+		&(pdev->histpostprocess));
 
     if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_hist_gen3_dmax_config_struct(
-			&(pdev->dmax_cfg));
-
-
-
-
+		&(pdev->dmax_cfg));
 
     if (status == VL53L1_ERROR_NONE)
         status = VL53L1_init_tuning_parm_storage_struct(
-			&(pdev->tuning_parms));
+		&(pdev->tuning_parms));
 
-
-
-
-
-
-
-	if (status == VL53L1_ERROR_NONE)
-		status = VL53L1_set_preset_mode(
+		if (status == VL53L1_ERROR_NONE)
+			status = VL53L1_set_preset_mode(
 			Dev,
 			pdev->preset_mode,
 			pdev->dss_config__target_total_rate_mcps,
-
 			pdev->phasecal_config_timeout_us,
 			pdev->mm_config_timeout_us,
 			pdev->range_config_timeout_us,
 			pdev->inter_measurement_period_ms);
-
 
 
 	VL53L1_init_histogram_bin_data_struct(

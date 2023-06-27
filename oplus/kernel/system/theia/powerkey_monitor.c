@@ -16,8 +16,8 @@ static int flow_index=0;
 static int stage_start=0;
 static const int flow_size = 16;
 static const int stage_brief_size = 64;
-static const int stage_total_size = stage_brief_size*flow_size;
-
+#define BUFFER_SIZE 64
+#define stage_total_size 1024
 static struct task_struct *block_thread = NULL;
 static bool timer_started = false;
 static int systemserver_pid = -1;
@@ -265,15 +265,15 @@ static ssize_t theia_powerkey_report_proc_write(struct file *file, const char __
         size_t count,loff_t *off)
 {
 
-    char buffer[stage_brief_size] = {0};
+    char buffer[BUFFER_SIZE] = {0};
 
     if(g_black_data.status == BLACK_STATUS_INIT || g_black_data.status == BLACK_STATUS_INIT_FAIL){
         POWER_MONITOR_DEBUG_PRINTK("%s init not finish: status = %d\n", __func__, g_black_data.status);
         return count;
     }
 
-    if (count >= stage_brief_size) {
-       count = stage_brief_size - 1;
+   if (count >= BUFFER_SIZE) {
+       count = BUFFER_SIZE - 1;
     }
 
     if (copy_from_user(buffer, buf, count)) {

@@ -1749,9 +1749,9 @@ int reclaim_address_space(struct address_space *mapping,
 	/* relciam memory with scan walk info
 	 * while PROCESS_RECLAIM_ENHANCE is enabled.
 	 */
-	reclaimed = reclaimed = reclaim_pages_from_list(&page_list, NULL, NULL);
+	reclaimed = reclaim_pages_from_list(&page_list, NULL, NULL);
 #else
-	reclaimed = reclaimed = reclaim_pages_from_list(&page_list, NULL);
+	reclaimed = reclaim_pages_from_list(&page_list, NULL);
 #endif
 	rp->nr_reclaimed += reclaimed;
 
