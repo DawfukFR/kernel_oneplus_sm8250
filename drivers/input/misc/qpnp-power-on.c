@@ -1544,7 +1544,7 @@ static int qpnp_pon_config_kpdpwr_init(struct qpnp_pon *pon,
 		if (rc < 0)
 			pr_err("failed to read QPNP_PON_RT_STS rc=%d\n", rc);
 
-		pr_info("KPDPWR status at init=0x%02x, KPDPWR_ON=%d\n",
+		pr_debug("KPDPWR status at init=0x%02x, KPDPWR_ON=%d\n",
 			pon_rt_sts, (pon_rt_sts & QPNP_PON_KPDPWR_ON));
 	}
 

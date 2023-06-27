@@ -149,7 +149,7 @@ int btfm_slim_enable_ch(struct btfmslim *btfmslim, struct btfmslim_ch *ch,
 	prop.dataf = SLIM_CH_DATAF_NOT_DEFINED;
 
 	chipset_ver = get_chipset_version();
-	BTFMSLIM_INFO("chipset soc version:%x", chipset_ver);
+	BTFMSLIM_DBG("chipset soc version:%x", chipset_ver);
 
 	/* Delay port opening for few chipsets if:
 	 *	1. for 8k, feedback channel
@@ -159,11 +159,11 @@ int btfm_slim_enable_ch(struct btfmslim *btfmslim, struct btfmslim_ch *ch,
 		(rxport == 1 && (rates == 44100 || rates == 88200))) &&
 		btfm_slim_is_sb_reset_needed(chipset_ver)) {
 
-		BTFMSLIM_INFO("btfm_is_port_opening_delayed %d",
+		BTFMSLIM_DBG("btfm_is_port_opening_delayed %d",
 				btfm_is_port_opening_delayed);
 
 		if (!btfm_is_port_opening_delayed) {
-			BTFMSLIM_INFO("SB reset needed, sleeping");
+			BTFMSLIM_DBG("SB reset needed, sleeping");
 			btfm_is_port_opening_delayed = true;
 			msleep(DELAY_FOR_PORT_OPEN_MS);
 		}
@@ -184,9 +184,9 @@ int btfm_slim_enable_ch(struct btfmslim *btfmslim, struct btfmslim_ch *ch,
 	ch_h[0] = ch->ch_hdl;
 	ch_h[1] = (grp) ? (ch+1)->ch_hdl : 0;
 
-	BTFMSLIM_INFO("channel define - prot:%d, dataf:%d, auxf:%d",
+	BTFMSLIM_DBG("channel define - prot:%d, dataf:%d, auxf:%d",
 			prop.prot, prop.dataf, prop.auxf);
-	BTFMSLIM_INFO("channel define - rates:%d, baser:%d, ratem:%d",
+	BTFMSLIM_DBG("channel define - rates:%d, baser:%d, ratem:%d",
 			rates, prop.baser, prop.ratem);
 
 	ret = slim_define_ch(btfmslim->slim_pgd, &prop, ch_h, nchan, grp,
@@ -209,7 +209,7 @@ int btfm_slim_enable_ch(struct btfmslim *btfmslim, struct btfmslim_ch *ch,
 		}
 
 		if (rxport) {
-			BTFMSLIM_INFO("slim_connect_sink(port: %d, ch: %d)",
+			BTFMSLIM_DBG("slim_connect_sink(port: %d, ch: %d)",
 				ch->port, ch->ch);
 			/* Connect Port with channel given by Machine driver*/
 			ret = slim_connect_sink(btfmslim->slim_pgd,
@@ -221,7 +221,7 @@ int btfm_slim_enable_ch(struct btfmslim *btfmslim, struct btfmslim_ch *ch,
 			}
 
 		} else {
-			BTFMSLIM_INFO("slim_connect_src(port: %d, ch: %d)",
+			BTFMSLIM_DBG("slim_connect_src(port: %d, ch: %d)",
 				ch->port, ch->ch);
 			/* Connect Port with channel given by Machine driver*/
 			ret = slim_connect_src(btfmslim->slim_pgd, ch->port_hdl,
@@ -235,7 +235,7 @@ int btfm_slim_enable_ch(struct btfmslim *btfmslim, struct btfmslim_ch *ch,
 	}
 
 	/* Activate the channel immediately */
-	BTFMSLIM_INFO(
+	BTFMSLIM_DBG(
 		"port: %d, ch: %d, grp: %d, ch->grph: 0x%x, ch_hdl: 0x%x",
 		chan->port, chan->ch, grp, chan->grph, chan->ch_hdl);
 	ret = slim_control_ch(btfmslim->slim_pgd, (grp ? chan->grph :
@@ -266,7 +266,7 @@ int btfm_slim_disable_ch(struct btfmslim *btfmslim, struct btfmslim_ch *ch,
 	if (!btfmslim || !ch)
 		return -EINVAL;
 
-	BTFMSLIM_INFO("port:%d, grp: %d, ch->grph:0x%x, ch->ch_hdl:0x%x ",
+	BTFMSLIM_DBG("port:%d, grp: %d, ch->grph:0x%x, ch->ch_hdl:0x%x ",
 		ch->port, grp, ch->grph, ch->ch_hdl);
 
 	btfm_is_port_opening_delayed = false;
@@ -348,7 +348,7 @@ static int btfm_slim_alloc_port(struct btfmslim *btfmslim)
 		return ret;
 
 	chipset_ver = get_chipset_version();
-	BTFMSLIM_INFO("chipset soc version:%x", chipset_ver);
+	BTFMSLIM_DBG("chipset soc version:%x", chipset_ver);
 
 	rx_chs = btfmslim->rx_chs;
 	tx_chs = btfmslim->tx_chs;
@@ -360,7 +360,7 @@ static int btfm_slim_alloc_port(struct btfmslim *btfmslim)
 				tx_chs->port = CHRKVER3_SB_PGD_PORT_TX1_FM;
 			else if (tx_chs->port == SLAVE_SB_PGD_PORT_TX2_FM)
 				tx_chs->port = CHRKVER3_SB_PGD_PORT_TX2_FM;
-			BTFMSLIM_INFO("Tx port:%d", tx_chs->port);
+			BTFMSLIM_DBG("Tx port:%d", tx_chs->port);
 		}
 		tx_chs = btfmslim->tx_chs;
 	}
@@ -427,25 +427,25 @@ int btfm_slim_hw_init(struct btfmslim *btfmslim)
 	slim_ifd = &btfmslim->slim_ifd;
 
 	mutex_lock(&btfmslim->io_lock);
-		BTFMSLIM_INFO(
+		BTFMSLIM_DBG(
 			"PGD Enum Addr: %.02x:%.02x:%.02x:%.02x:%.02x: %.02x",
 			slim->e_addr[0], slim->e_addr[1], slim->e_addr[2],
 			slim->e_addr[3], slim->e_addr[4], slim->e_addr[5]);
-		BTFMSLIM_INFO(
+		BTFMSLIM_DBG(
 			"IFD Enum Addr: %.02x:%.02x:%.02x:%.02x:%.02x: %.02x",
 			slim_ifd->e_addr[0], slim_ifd->e_addr[1],
 			slim_ifd->e_addr[2], slim_ifd->e_addr[3],
 			slim_ifd->e_addr[4], slim_ifd->e_addr[5]);
 
 	chipset_ver = get_chipset_version();
-	BTFMSLIM_INFO("chipset soc version:%x", chipset_ver);
+	BTFMSLIM_DBG("chipset soc version:%x", chipset_ver);
 
 	if (chipset_ver == QCA_HSP_SOC_ID_0100 ||
 		chipset_ver == QCA_HSP_SOC_ID_0110 ||
 		chipset_ver == QCA_HSP_SOC_ID_0210 ||
 		chipset_ver == QCA_HSP_SOC_ID_1211 ||
 		chipset_ver == QCA_HSP_SOC_ID_0200) {
-		BTFMSLIM_INFO("chipset is hastings prime, overwriting EA");
+		BTFMSLIM_DBG("chipset is hastings prime, overwriting EA");
 		slim->e_addr[0] = 0x00;
 		slim->e_addr[1] = 0x01;
 		slim->e_addr[2] = 0x21;
@@ -460,7 +460,7 @@ int btfm_slim_hw_init(struct btfmslim *btfmslim)
 		slim_ifd->e_addr[4] = 0x17;
 		slim_ifd->e_addr[5] = 0x02;
 	} else if (chipset_ver == QCA_HASTINGS_SOC_ID_0200) {
-		BTFMSLIM_INFO("chipset is hastings 2.0, overwriting EA");
+		BTFMSLIM_DBG("chipset is hastings 2.0, overwriting EA");
 		slim->e_addr[0] = 0x00;
 		slim->e_addr[1] = 0x01;
 		slim->e_addr[2] = 0x20;
@@ -475,11 +475,11 @@ int btfm_slim_hw_init(struct btfmslim *btfmslim)
 		slim_ifd->e_addr[4] = 0x17;
 		slim_ifd->e_addr[5] = 0x02;
 	}
-		BTFMSLIM_INFO(
+		BTFMSLIM_DBG(
 			"PGD Enum Addr: %.02x:%.02x:%.02x:%.02x:%.02x: %.02x",
 			slim->e_addr[0], slim->e_addr[1], slim->e_addr[2],
 			slim->e_addr[3], slim->e_addr[4], slim->e_addr[5]);
-		BTFMSLIM_INFO(
+		BTFMSLIM_DBG(
 			"IFD Enum Addr: %.02x:%.02x:%.02x:%.02x:%.02x: %.02x",
 			slim_ifd->e_addr[0], slim_ifd->e_addr[1],
 			slim_ifd->e_addr[2], slim_ifd->e_addr[3],

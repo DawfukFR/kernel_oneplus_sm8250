@@ -204,7 +204,7 @@ static ktime_t initcall_debug_start(struct device *dev, void *cb)
 	if (!pm_print_times_enabled)
 		return 0;
 
-	dev_info(dev, "calling %pF @ %i, parent: %s\n", cb,
+	dev_dbg(dev, "calling %pF @ %i, parent: %s\n", cb,
 		 task_pid_nr(current),
 		 dev->parent ? dev_name(dev->parent) : "none");
 	return ktime_get();
@@ -222,7 +222,7 @@ static void initcall_debug_report(struct device *dev, ktime_t calltime,
 	rettime = ktime_get();
 	nsecs = (s64) ktime_to_ns(ktime_sub(rettime, calltime));
 
-	dev_info(dev, "%pF returned %d after %Ld usecs\n", cb, error,
+	dev_dbg(dev, "%pF returned %d after %Ld usecs\n", cb, error,
 		 (unsigned long long)nsecs >> 10);
 }
 

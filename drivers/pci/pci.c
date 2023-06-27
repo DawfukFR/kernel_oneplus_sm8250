@@ -6133,7 +6133,7 @@ static int __init pci_setup(char *str)
 			if (!strcmp(str, "nomsi")) {
 				pci_no_msi();
 			} else if (!strncmp(str, "noats", 5)) {
-				pr_info("PCIe: ATS is disabled\n");
+				pr_debug("PCIe: ATS is disabled\n");
 				pcie_ats_disabled = true;
 			} else if (!strcmp(str, "noaer")) {
 				pci_no_aer();
