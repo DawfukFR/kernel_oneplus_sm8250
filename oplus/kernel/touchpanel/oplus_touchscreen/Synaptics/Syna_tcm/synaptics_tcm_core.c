@@ -2781,7 +2781,7 @@ static void store_to_buf(char *buffer, char* format, ...)
     va_end(args);
 
     if (count + strlen(buf) + 2 > MAX_BUFFER_SIZE) {
-        pr_err("exceed the max buffer size\n");
+        pr_debug("exceed the max buffer size\n");
         count = 0;
         return;
     }

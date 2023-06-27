@@ -26,17 +26,17 @@
 #define TPD_DEVICE "td4330"
 #define UPDATE_DISPLAY_CONFIG
 
-#define TPD_INFO(a, arg...)  pr_err("[TP]"TPD_DEVICE ": " a, ##arg)
+#define TPD_INFO(a, arg...)  pr_debug("[TP]"TPD_DEVICE ": " a, ##arg)
 #define TPD_DEBUG(a, arg...)\
     do{\
         if (LEVEL_DEBUG == tp_debug)\
-            pr_err("[TP]"TPD_DEVICE ": " a, ##arg);\
+            pr_debug("[TP]"TPD_DEVICE ": " a, ##arg);\
     }while(0)
 
 #define TPD_DETAIL(a, arg...)\
     do{\
         if (LEVEL_BASIC != tp_debug)\
-            pr_err("[TP]"TPD_DEVICE ": " a, ##arg);\
+            pr_debug("[TP]"TPD_DEVICE ": " a, ##arg);\
     }while(0)
 
 #define TPD_DEBUG_NTAG(a, arg...)\
@@ -513,7 +513,7 @@ static inline int secure_memcpy(unsigned char *dest, unsigned int dest_size,
         return -EINVAL;
 
     if (count > dest_size || count > src_size) {
-        pr_err("%s: src_size = %d, dest_size = %d, count = %d\n",
+        pr_debug("%s: src_size = %d, dest_size = %d, count = %d\n",
                 __func__, src_size, dest_size, count);
         return -EINVAL;
     }
