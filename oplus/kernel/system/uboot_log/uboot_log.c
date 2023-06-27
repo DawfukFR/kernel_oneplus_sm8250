@@ -29,7 +29,6 @@
 #include <linux/kallsyms.h>
 #include <linux/init.h>
 
-
 #include <soc/qcom/memory_dump.h>
 #include <soc/qcom/minidump.h>
 
@@ -48,18 +47,14 @@ static size_t total_size = 0;
 static struct kmsg_dumper kboot_dumper;
 static struct task_struct *ubootback_thread = NULL;
 
-
 /* record xbl uefi boot buffer */
 static char *uboot_log_buf = NULL;
 static u32 	uboot_log_buf_len;
 
-
-
-
 /*
  * init uboot/kboot log buffer addr/size
  */
-static int uboot_kboot_buffer_init()
+static int uboot_kboot_buffer_init(void)
 {
 	struct reserved_mem *r_mem = NULL;
 	struct device_node *reserved_memory, *kboot_uboot_logmemory;
@@ -167,7 +162,7 @@ const struct file_operations kboot_fops = {
 /*
  * Dont printk any log int this thread
  */
-int ubootback_thread_fn()
+int ubootback_thread_fn(void *arg)
 {
 	size_t line_len = 0;
 	u32 idx =0;
@@ -191,7 +186,7 @@ int ubootback_thread_fn()
 	return 0;
 }
 
-static int __init kernel_uboot_log_init()
+static int __init kernel_uboot_log_init(void)
 {
 	struct proc_dir_entry *pEntry = NULL;
 
