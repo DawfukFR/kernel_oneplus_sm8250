@@ -499,7 +499,7 @@ static int sde_connector_update_hbm_enter(struct drm_connector *connector, struc
 	struct drm_crtc *crtc = c_conn->encoder->crtc;
 	struct dsi_panel *panel = dsi_display->panel;
 	int vblank = 0;
-	u32 target_vblank, current_vblank;
+	u32 target_vblank, current_vblank = 0;
 	int rc = 0;
 	int ret;
 

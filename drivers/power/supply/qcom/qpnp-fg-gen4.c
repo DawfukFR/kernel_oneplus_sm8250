@@ -1613,7 +1613,7 @@ static int fg_gen4_adjust_ki_coeff_full_soc(struct fg_gen4_chip *chip,
 						int batt_temp)
 {
 	struct fg_dev *fg = &chip->fg;
-	int rc, ki_coeff_full_soc_norm, ki_coeff_full_soc_low;
+	int rc, ki_coeff_full_soc_norm = 0, ki_coeff_full_soc_low;
 	u8 val;
 
 	if ((batt_temp < 0) ||
@@ -6337,7 +6337,7 @@ static struct proj_batt_info proj_batterys =
 
 static bool is_batt_id_valid(struct fg_gen4_chip *chip)
 {
-	int id, rc, batt_id_voltage;
+	int id, rc = 0, batt_id_voltage;
 	bool batt_id_valid = false;
 	unsigned int project_num = 0;
 /*avoid for bootup*/	
@@ -6775,7 +6775,7 @@ static int oplus_fg_update_soc_smooth_parameter(void)
 
 void oplus_set_float_uv_ma(int iterm_ma, int float_volt_uv)
 {
-	struct fg_dev *fg;
+	struct fg_dev *fg = NULL;
 	//fg_chip->fg->dt.iterm_ma = iterm_ma;
 	fg->bp.float_volt_uv = float_volt_uv;
 	pr_err("kilody: oplus_set_float_uv_ma float_volt_uv=%d\n",  float_volt_uv);

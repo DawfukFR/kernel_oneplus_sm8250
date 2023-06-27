@@ -693,7 +693,7 @@ UINT_8 FlashDownload128( UINT_8 ModuleVendor, UINT_8 ActVer, UINT_8 MasterSlave,
 	do {
 		if((ptr->Index == ( ((UINT_32)ModuleVendor<<16) + ((UINT_32)ActVer<<8) + MasterSlave)) && (ptr->FWType == FWType)) {
 
-			// UploadFile‚ª64Byte‚İ‚ÉPadding‚³‚ê‚Ä‚¢‚È‚¢‚È‚ç‚ÎAErrorB
+			// UploadFileï¿½ï¿½64Byteï¿½ï¿½ï¿½İ‚ï¿½Paddingï¿½ï¿½ï¿½ï¿½Ä‚ï¿½ï¿½È‚ï¿½ï¿½È‚ï¿½ÎAErrorï¿½B
 			if( ( ptr->SizeFromCode % 64 ) != 0 )	return (0xF1) ;
 
 			if(!RamRead32A(0x8000, &data1)) {
@@ -1275,7 +1275,7 @@ UINT_8	TstActMov( UINT_8 UcDirSel )
 {
 	UINT_8	UcRsltSts = 0;
 	INT_32	SlMeasureParameterNum ;
-	INT_32	SlMeasureParameterA , SlMeasureParameterB ;
+	INT_32	SlMeasureParameterA = 0 , SlMeasureParameterB = 0 ;
 	UnllnVal	StMeasValueA  , StMeasValueB ;
 	float		SfLimit , Sfzoom , Sflenz , Sfshift ;
 	UINT_32		UlLimit , Ulzoom , Ullenz , Ulshift , UlActChkLvl ;
@@ -1401,7 +1401,7 @@ UINT_8	RunHea( void )
 UINT_8	RunGea( void )
 {
 	UnllnVal	StMeasValueA , StMeasValueB ;
-	INT_32		SlMeasureParameterA , SlMeasureParameterB ;
+	INT_32		SlMeasureParameterA = 0 , SlMeasureParameterB = 0 ;
 	UINT_8 		UcRst, UcCnt, UcXLowCnt, UcYLowCnt, UcXHigCnt, UcYHigCnt ;
 	UINT_16		UsGxoVal[10], UsGyoVal[10], UsDif;
 	INT_32		SlMeasureParameterNum , SlMeasureAveValueA , SlMeasureAveValueB ;
@@ -1617,11 +1617,11 @@ UINT_8 LoadUareToPM( DOWNLOAD_TBL_EXT* ptr , UINT_8 mode )
 	
 	if( !mode ){
 		RamWrite32A( 0xE000 , 0x00000000 );		// to boot
-		WitTim( 15 ) ;													// BootƒvƒƒOƒ‰ƒ€‚ğ‰ñ‚·‚Ì‚É15msec•K—vB
+		WitTim( 15 ) ;													// Bootï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ‚·‚Ì‚ï¿½15msecï¿½Kï¿½vï¿½B
 		IORead32A( ROMINFO,				(UINT_32 *)&UlReadVal ) ;	
 		if( UlReadVal != 0x0B ){
 			IOWrite32A( SYSDSP_REMAP,				0x00001400 ) ;		// CORE_RST[12], MC_IGNORE2[10] = 1
-			WitTim( 15 ) ;												// BootƒvƒƒOƒ‰ƒ€‚ğ‰ñ‚·‚Ì‚É15msec•K—vB
+			WitTim( 15 ) ;												// Bootï¿½vï¿½ï¿½ï¿½Oï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ñ‚·‚Ì‚ï¿½15msecï¿½Kï¿½vï¿½B
 			IORead32A( ROMINFO,				(UINT_32 *)&UlReadVal ) ;	
 			if( UlReadVal != 0x0B) {
 				return( 0x02 );
@@ -1643,7 +1643,7 @@ UINT_8 LoadUareToPM( DOWNLOAD_TBL_EXT* ptr , UINT_8 mode )
 			IOWrite32A( 0xE0701C , 0x00000002);
 			return (0x10) ;									// trans ng
 		}
-		RamRead32A( 0x5004, &UlReadVal );					// PmCheck.ExecFlag‚Ì“Ç‚İo‚µ
+		RamRead32A( 0x5004, &UlReadVal );					// PmCheck.ExecFlagï¿½Ì“Ç‚İoï¿½ï¿½
 	}while ( UlReadVal != 0 );
 	IOWrite32A( 0xE0701C , 0x00000002);
 	

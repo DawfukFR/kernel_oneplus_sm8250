@@ -81,7 +81,7 @@ extern	stAclVal	StAclVal124 ;				//!< Execute Command Parameter
 //**************************
 //	define					
 //**************************
-#define 	ONE_MSEC_COUNT	18			// 18.0288kHz * 18 à 1ms
+#define 	ONE_MSEC_COUNT	18			// 18.0288kHz * 18 ï¿½ï¿½ 1ms
 
 //#define 	HALL_ADJ		0
 #define 	LOOPGAIN		1
@@ -431,7 +431,7 @@ UINT8 GetGyroOffset124( UINT16* GyroOffsetX, UINT16* GyroOffsetY, INT16 GYROF_UP
 	
 	SlMeasureAveValueA = ( SlMeasureAveValueA >> 16 ) & 0x0000FFFF ;
 	SlMeasureAveValueB = ( SlMeasureAveValueB >> 16 ) & 0x0000FFFF ;
-	// EP1‚Å‚Í”½“]ˆ—‚µ‚È‚¢B
+	// EP1ï¿½Å‚Í”ï¿½ï¿½]ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½È‚ï¿½ï¿½B
 //	SlMeasureAveValueA = 0x00010000 - SlMeasureAveValueA ;
 //	SlMeasureAveValueB = 0x00010000 - SlMeasureAveValueB ;
 	
@@ -857,17 +857,17 @@ UINT8	RdStatus124( UINT8 UcStBitChk )
 void	SetSinWavGenInt124( void )
 {
 	
-	RamWrite32A( SinWave_Offset		,	0x00000000 ) ;		// ”­¶ü”g”‚ÌƒIƒtƒZƒbƒg‚ğİ’è
-	RamWrite32A( SinWave_Phase		,	0x60000000 ) ;		// ³Œ·”g‚ÌˆÊ‘Š—Ê
-	RamWrite32A( SinWave_Gain		,	0x00000000 ) ;		// ”­¶ü”g”‚ÌƒAƒbƒeƒl[ƒ^(‰Šú’l‚Í0[dB])
-//	RamWrite32A( SinWave_Gain		,	0x7FFFFFFF ) ;		// ”­¶ü”g”‚ÌƒAƒbƒeƒl[ƒ^(‰Šú’l‚ÍCut)
-//	SetTransDataAdr124( SinWave_OutAddr	,	(UINT32)SinWave_Output ) ;		// ‰Šú’l‚Ìo—ÍæƒAƒhƒŒƒX‚ÍA©•ª‚Ìƒƒ“ƒo
+	RamWrite32A( SinWave_Offset		,	0x00000000 ) ;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒIï¿½tï¿½Zï¿½bï¿½gï¿½ï¿½İ’ï¿½
+	RamWrite32A( SinWave_Phase		,	0x60000000 ) ;		// ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ÌˆÊ‘ï¿½ï¿½ï¿½
+	RamWrite32A( SinWave_Gain		,	0x00000000 ) ;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒAï¿½bï¿½eï¿½lï¿½[ï¿½^(ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½0[dB])
+//	RamWrite32A( SinWave_Gain		,	0x7FFFFFFF ) ;		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒAï¿½bï¿½eï¿½lï¿½[ï¿½^(ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½Cut)
+//	SetTransDataAdr124( SinWave_OutAddr	,	(UINT32)SinWave_Output ) ;		// ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Ìoï¿½Íï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½ï¿½ï¿½o
 
-	RamWrite32A( CosWave_Offset		,	0x00000000 );		// ”­¶ü”g”‚ÌƒIƒtƒZƒbƒg‚ğİ’è
-	RamWrite32A( CosWave_Phase 		,	0x00000000 );		// ³Œ·”g‚ÌˆÊ‘Š—Ê
-	RamWrite32A( CosWave_Gain 		,	0x00000000 );		// ”­¶ü”g”‚ÌƒAƒbƒeƒl[ƒ^(‰Šú’l‚ÍCut)
-//	RamWrite32A( CosWave_Gain 		,	0x7FFFFFFF );		// ”­¶ü”g”‚ÌƒAƒbƒeƒl[ƒ^(‰Šú’l‚Í0[dB])
-//	SetTransDataAdr124( CosWave_OutAddr	,	(UINT32)CosWave_Output );		// ‰Šú’l‚Ìo—ÍæƒAƒhƒŒƒX‚ÍA©•ª‚Ìƒƒ“ƒo
+	RamWrite32A( CosWave_Offset		,	0x00000000 );		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒIï¿½tï¿½Zï¿½bï¿½gï¿½ï¿½İ’ï¿½
+	RamWrite32A( CosWave_Phase 		,	0x00000000 );		// ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ÌˆÊ‘ï¿½ï¿½ï¿½
+	RamWrite32A( CosWave_Gain 		,	0x00000000 );		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒAï¿½bï¿½eï¿½lï¿½[ï¿½^(ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½Cut)
+//	RamWrite32A( CosWave_Gain 		,	0x7FFFFFFF );		// ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½gï¿½ï¿½ï¿½ÌƒAï¿½bï¿½eï¿½lï¿½[ï¿½^(ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½ï¿½0[dB])
+//	SetTransDataAdr124( CosWave_OutAddr	,	(UINT32)CosWave_Output );		// ï¿½ï¿½ï¿½ï¿½ï¿½lï¿½Ìoï¿½Íï¿½Aï¿½hï¿½ï¿½ï¿½Xï¿½ÍAï¿½ï¿½ï¿½ï¿½ï¿½Ìƒï¿½ï¿½ï¿½ï¿½o
 	
 	RamWrite32A( SinWaveC_Regsiter	,	0x00000000 ) ;								// Sine Wave Stop
 	
@@ -891,7 +891,7 @@ UINT8	TstActMov124( UINT8 UcDirSel )
 {
 	UINT8	UcRsltSts = 0;
 	INT32	SlMeasureParameterNum ;
-	INT32	SlMeasureParameterA , SlMeasureParameterB ;
+	INT32	SlMeasureParameterA = 0 , SlMeasureParameterB = 0 ;
 	UnllnVal	StMeasValueA  , StMeasValueB ;
 	float		SfLimit , Sfzoom , Sflenz , Sfshift ;
 	UINT32		UlLimit , Ulzoom , Ullenz , Ulshift , UlActChkLvl ;
@@ -950,7 +950,7 @@ TRACE(" DIR = %d, lmt = %08x, zom = %08x , lnz = %08x ,sft = %08x \n", UcDirSel,
 	}else if( UcDirSel == Y_DIR ){
 		SetTransDataAdr124( SinWave_OutAddr	,	(UINT32)HALL_RAM_HYOFF1 ) ;	// Set Sine Wave Input RAM
 	}
-	MesFil124( NOISE ) ;					// ‘ª’è—pƒtƒBƒ‹ƒ^[‚ğİ’è‚·‚éB
+	MesFil124( NOISE ) ;					// ï¿½ï¿½ï¿½ï¿½pï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½[ï¿½ï¿½İ’è‚·ï¿½ï¿½B
 
 	MeasureStart124( SlMeasureParameterNum , SlMeasureParameterA , SlMeasureParameterB ) ;					// Start measure
 	
@@ -1017,8 +1017,8 @@ UINT8	RunHea124( void )
 // History			: First edition 						
 //********************************************************************************
 #define 	GEA_NUM		512			// 512times
-// #define		GEA_DIF_HIG		0x0062			// 2021_32.8lsb/‹/s    max 3.0‹/s-p-p
- #define		GEA_DIF_HIG		0x0057			// 2030_87.5lsb/‹/s    max 1.0‹/s-p-p
+// #define		GEA_DIF_HIG		0x0062			// 2021_32.8lsb/ï¿½ï¿½/s    max 3.0ï¿½ï¿½/s-p-p
+ #define		GEA_DIF_HIG		0x0057			// 2030_87.5lsb/ï¿½ï¿½/s    max 1.0ï¿½ï¿½/s-p-p
  #define		GEA_DIF_LOW		0x0001				// Gyro Examination of Acceptance
  
 UINT8	RunGea124( void )
@@ -1033,11 +1033,11 @@ UINT8	RunGea124( void )
 	UcRst = EXE_END ;
 	UcXLowCnt = UcYLowCnt = UcXHigCnt = UcYHigCnt = 0 ;
 	
-	MesFil124( THROUGH ) ;				// ‘ª’è—pƒtƒBƒ‹ƒ^[‚ğİ’è‚·‚éB
+	MesFil124( THROUGH ) ;				// ï¿½ï¿½ï¿½ï¿½pï¿½tï¿½Bï¿½ï¿½ï¿½^ï¿½[ï¿½ï¿½İ’è‚·ï¿½ï¿½B
 	
 	for( UcCnt = 0 ; UcCnt < 10 ; UcCnt++ )
 	{
-		//•½‹Ï’l‘ª’è
+		//ï¿½ï¿½ï¿½Ï’lï¿½ï¿½ï¿½ï¿½
 	
 		MesFil124( THROUGH ) ;					// Set Measure Filter
 
@@ -1062,10 +1062,10 @@ UINT8	RunGea124( void )
 //TRACE("GX_AVEOFT = %08xh \n",(unsigned int)SlMeasureAveValueA) ;
 //TRACE("GY_AVEOFT = %08xh \n",(unsigned int)SlMeasureAveValueB) ;
 		// X
-		UsGxoVal[UcCnt] = (UINT16)( SlMeasureAveValueA >> 16 );	// •½‹Ï’l‘ª’è
+		UsGxoVal[UcCnt] = (UINT16)( SlMeasureAveValueA >> 16 );	// ï¿½ï¿½ï¿½Ï’lï¿½ï¿½ï¿½ï¿½
 		
 		// Y
-		UsGyoVal[UcCnt] = (UINT16)( SlMeasureAveValueB >> 16 );	// •½‹Ï’l‘ª’è
+		UsGyoVal[UcCnt] = (UINT16)( SlMeasureAveValueB >> 16 );	// ï¿½ï¿½ï¿½Ï’lï¿½ï¿½ï¿½ï¿½
 		
 //TRACE("UcCnt = %02x, UsGxoVal[UcCnt] = %04x\n", UcCnt, UsGxoVal[UcCnt] ) ;
 //TRACE("UcCnt = %02x, UsGyoVal[UcCnt] = %04x\n", UcCnt, UsGyoVal[UcCnt] ) ;
@@ -1257,8 +1257,8 @@ UINT8	 MesRam124( INT32 SlMeasureParameterA, INT32 SlMeasureParameterB, INT32 Sl
 //********************************************************************************
 #define 	GEA_NUM2		2048			// 2048times
 // level of judgement
-#define		GEA_MAX_LVL		0x0A41			// 2030_87.5lsb/‹/s    max 30‹/s-p-p
-#define		GEA_MIN_LVL		0x1482			// 2030_87.5lsb/‹/s    min 60‹/s-p-p
+#define		GEA_MAX_LVL		0x0A41			// 2030_87.5lsb/ï¿½ï¿½/s    max 30ï¿½ï¿½/s-p-p
+#define		GEA_MIN_LVL		0x1482			// 2030_87.5lsb/ï¿½ï¿½/s    min 60ï¿½ï¿½/s-p-p
 UINT8	RunGea2124( UINT8 UcMode )
 {
 	INT32	SlMeasureParameterA , SlMeasureParameterB ;
@@ -1288,7 +1288,7 @@ UINT8	RunGea2124( UINT8 UcMode )
 
 ////////// ////////// ////////// ////////// //////////
 
-	RamWrite32A( CMD_GYRO_WR_ACCS , 0x1B180000 );		/* FS_SEL=3ŒÅ’è & Disable Self Test */
+	RamWrite32A( CMD_GYRO_WR_ACCS , 0x1B180000 );		/* FS_SEL=3ï¿½Å’ï¿½ & Disable Self Test */
 	UcStRd = 1;
 	while( UcStRd ) {
 		UcStRd = RdStatus124(1);
@@ -1360,7 +1360,7 @@ UINT8	RunGea2124( UINT8 UcMode )
 
 ////////// ////////// ////////// ////////// //////////
 
-	RamWrite32A( CMD_GYRO_WR_ACCS , 0x1BD80000 );		/* FS_SEL=3ŒÅ’è & Enable Self Test */
+	RamWrite32A( CMD_GYRO_WR_ACCS , 0x1BD80000 );		/* FS_SEL=3ï¿½Å’ï¿½ & Enable Self Test */
 	UcStRd = 1;
 	while( UcStRd ) {
 		UcStRd = RdStatus124(1);
@@ -1415,7 +1415,7 @@ UINT8	RunGea2124( UINT8 UcMode )
 		UcRst = UcRst | EXE_GYBELOW ;
 	}
 	
-	RamWrite32A( CMD_GYRO_WR_ACCS , 0x1B000000 | ( UlGyroConfig >> 8));		/* Œ³‚Ìİ’è’l‚É–ß‚· */
+	RamWrite32A( CMD_GYRO_WR_ACCS , 0x1B000000 | ( UlGyroConfig >> 8));		/* ï¿½ï¿½ï¿½Ìİ’ï¿½lï¿½É–ß‚ï¿½ */
 	UcStRd = 1;
 	while( UcStRd ) {
 		UcStRd = RdStatus124(1);
@@ -1438,15 +1438,15 @@ UINT8	RunGea2124( UINT8 UcMode )
 // Explanation		: Angle Correction
 // History			: First edition
 //********************************************************************************
-/*  bit7  	HX GYR			Hall X  ‚Æ“¯•ûŒü‚ÌGyroM†‚ªGX?               0:GX  1:GY  */
-/*  bit6  	HX GYR pol		Hall X+ ‚Æ“¯•ûŒü‚ÌGyroM†‚ªX+‚ÆG+‚Å“¯•ûŒü?   0:NEG 1:POS */
-/*  bit5  	HY GYR pol		Hall Y+ ‚Æ“¯•ûŒü‚ÌGyroM†‚ªY+‚ÆG+‚Å“¯•ûŒü?   0:NEG 1:POS */
-/*  bit4  	GZ pol			Šî–{‹É«‚É‘Î‚µ‚ÄGyroZM†‚ª“¯•ûŒü?            0:NEG 1:POS */
-/*  bit3  	HX ACL			Hall X  ‚Æ“¯•ûŒü‚ÌAcclM†‚ªAX?               0:AX  1:AY  */
-/*  bit2  	HX ACL pol		Hall X+ ‚Æ“¯•ûŒü‚ÌAcclM†‚ªX+‚ÆA+‚Å“¯•ûŒü?   0:NEG 1:POS */
-/*  bit1  	HY ACL pol		Hall Y+ ‚Æ“¯•ûŒü‚ÌAcclM†‚ªY+‚ÆA+‚Å“¯•ûŒü?   0:NEG 1:POS */
-/*  bit0  	AZ pol			Šî–{‹É«‚É‘Î‚µ‚ÄAcclZM†‚ª“¯•ûŒü?            0:NEG 1:POS */
-                      //   top0‹btm0‹//
+/*  bit7  	HX GYR			Hall X  ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gyroï¿½Mï¿½ï¿½ï¿½ï¿½GX?               0:GX  1:GY  */
+/*  bit6  	HX GYR pol		Hall X+ ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gyroï¿½Mï¿½ï¿½ï¿½ï¿½X+ï¿½ï¿½G+ï¿½Å“ï¿½ï¿½ï¿½ï¿½ï¿½?   0:NEG 1:POS */
+/*  bit5  	HY GYR pol		Hall Y+ ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Gyroï¿½Mï¿½ï¿½ï¿½ï¿½Y+ï¿½ï¿½G+ï¿½Å“ï¿½ï¿½ï¿½ï¿½ï¿½?   0:NEG 1:POS */
+/*  bit4  	GZ pol			ï¿½ï¿½{ï¿½Éï¿½ï¿½É‘Î‚ï¿½ï¿½ï¿½GyroZï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?            0:NEG 1:POS */
+/*  bit3  	HX ACL			Hall X  ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Acclï¿½Mï¿½ï¿½ï¿½ï¿½AX?               0:AX  1:AY  */
+/*  bit2  	HX ACL pol		Hall X+ ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Acclï¿½Mï¿½ï¿½ï¿½ï¿½X+ï¿½ï¿½A+ï¿½Å“ï¿½ï¿½ï¿½ï¿½ï¿½?   0:NEG 1:POS */
+/*  bit1  	HY ACL pol		Hall Y+ ï¿½Æ“ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½Acclï¿½Mï¿½ï¿½ï¿½ï¿½Y+ï¿½ï¿½A+ï¿½Å“ï¿½ï¿½ï¿½ï¿½ï¿½?   0:NEG 1:POS */
+/*  bit0  	AZ pol			ï¿½ï¿½{ï¿½Éï¿½ï¿½É‘Î‚ï¿½ï¿½ï¿½AcclZï¿½Mï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½ï¿½?            0:NEG 1:POS */
+                      //   top0ï¿½ï¿½btm0ï¿½ï¿½//
 const UINT8 PACT0Tbl124[] = { 0xFF, 0xFF };	/* Dummy table */
 const UINT8 PACT1Tbl124[] = { 0x20, 0xDF };	
 const UINT8 PACT2Tbl124[] = { 0x26, 0xD9 };	/* ACT_45DEG */
@@ -1643,7 +1643,7 @@ TRACE("SetGyroAccelCoef SelectAct 0x%x GyroPostion 0x%x\n", SelectAct, GyroPosti
 
 UINT32	MeasGain124 ( UINT16	UcDirSel, UINT16	UsMeasFreq , UINT32 UlMesAmp )
 {
-	INT32			SlMeasureParameterA , SlMeasureParameterB ;
+	INT32			SlMeasureParameterA = 0 , SlMeasureParameterB = 0 ;
 	INT32			SlMeasureParameterNum , SlSineWaveOffset;
 	UnllnVal		StMeasValueA  , StMeasValueB ;
 	UINT32	UlReturnVal;
