@@ -69,19 +69,19 @@ static int horae_shell_probe(struct platform_device *pdev)
 	int result;
 
 	if (!of_device_is_available(dev_node)) {
-		pr_err("shell-temp dev not found\n");
+		pr_debug("shell-temp dev not found\n");
 		return -ENODEV;
 	}
 
 	hst = kzalloc(sizeof(struct horae_shell_temp), GFP_KERNEL);
 	if (!hst) {
-		pr_err("alloc horae mem failed\n");
+		pr_debug("alloc horae mem failed\n");
 		return -ENOMEM;
 	}
 
 	result = ida_simple_get(&shell_temp_ida, 0, 0, GFP_KERNEL);
 	if (result < 0) {
-		pr_err("genernal horae id failed\n");
+		pr_debug("genernal horae id failed\n");
 		ret = -EINVAL;
 		goto err_free_mem;
 	}
@@ -91,7 +91,7 @@ static int horae_shell_probe(struct platform_device *pdev)
 	tz_dev = thermal_zone_device_register(dev_node->name,
 			0, 0, hst, &shell_thermal_zone_ops, NULL, 0, 0);
 	if (IS_ERR_OR_NULL(tz_dev)) {
-		pr_err("register thermal zone for shell failed\n");
+		pr_debug("register thermal zone for shell failed\n");
 		ret = -ENODEV;
 		goto err_remove_id;
 	}
@@ -148,7 +148,7 @@ static ssize_t proc_shell_write(struct file *filp, const char __user *buf,
 
 	ret = copy_from_user(tmp, buf, len);
 	if (ret) {
-		pr_err("copy_from_user failed, ret=%d\n", ret);
+		pr_debug("copy_from_user failed, ret=%d\n", ret);
 		return count;
 	}
 
@@ -159,12 +159,12 @@ static ssize_t proc_shell_write(struct file *filp, const char __user *buf,
 
 	ret = sscanf(tmp, "%d %d", &index, &temp);
 	if (ret < 2) {
-		pr_err("write failed, ret=%d\n", ret);
+		pr_debug("write failed, ret=%d\n", ret);
 		return count;
 	}
 
 	if (index >= SHELL_MAX) {
-		pr_err("write invalid para\n");
+		pr_debug("write invalid para\n");
 		return count;
 	}
 
@@ -218,7 +218,7 @@ static int __init horae_shell_init(void)
 
 	shell_proc_entry = proc_create("shell-temp", 0666, NULL, &proc_shell_fops);
 	if (!shell_proc_entry) {
-		pr_err("shell-temp proc create failed\n");
+		pr_debug("shell-temp proc create failed\n");
 		return -EINVAL;
 	}
 

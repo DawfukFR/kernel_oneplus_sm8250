@@ -22,7 +22,7 @@
 #define FW_UPDATE_DEVICE "kernelFwUpdate"
 #define MAX_FW_NAME 256
 
-#define FW_UPDATE_INFO(a, arg...)  pr_err("[FW_UPDATE]"FW_UPDATE_DEVICE ": " a, ##arg)
+#define FW_UPDATE_INFO(a, arg...)  pr_debug("[FW_UPDATE]"FW_UPDATE_DEVICE ": " a, ##arg)
 
 struct device *fw_update_dev = NULL;
 

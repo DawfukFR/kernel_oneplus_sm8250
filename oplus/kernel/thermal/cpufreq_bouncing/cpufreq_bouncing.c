@@ -225,7 +225,7 @@ static int enable_store(const char *buf, const struct kernel_param *kp)
 	if (self_activate)
 		wake_up_process(cb_task);
 
-	pr_info("cb %s\n", enable ? "enabled" : "disabled");
+	pr_debug("cb %s\n", enable ? "enabled" : "disabled");
 
 	return 0;
 }
@@ -295,7 +295,7 @@ static int cb_config_store(const char *buf, const struct kernel_param *kp)
 	struct cpufreq_bouncing *cb;
 
 	if (debug)
-		pr_info("%s\n", buf);
+		pr_debug("%s\n", buf);
 
 	if (sscanf(buf, "%d,%d,%d,%llu,%d,%lld,%d,%lld\n",
 		&v.clus,
@@ -491,7 +491,7 @@ unsigned int cb_cap(struct cpufreq_policy *pol, unsigned int freq)
 	capped = min(freq, cb->freqs[cb->cur_level]);
 
 	if (debug)
-		pr_info("cpu %d, orig %u, capped %d\n", cpu, freq, capped);
+		pr_debug("cpu %d, orig %u, capped %d\n", cpu, freq, capped);
 
 	return capped;
 }
@@ -599,7 +599,7 @@ void cb_update(struct cpufreq_policy *pol, u64 time)
 #endif
 
 	if (debug)
-		pr_info("cpu %d update: ts now %llu last %llu last_update %llu delta %llu update_d %llu cur %u acc %llu, cur_level %d min_over_target_freq %d isolated %d last_core_boost %d\n",
+		pr_debug("cpu %d update: ts now %llu last %llu last_update %llu delta %llu update_d %llu cur %u acc %llu, cur_level %d min_over_target_freq %d isolated %d last_core_boost %d\n",
 			cpu,
 			NSEC_TO_MSEC(time),
 			NSEC_TO_MSEC(cb->last_ts),
@@ -703,7 +703,7 @@ static void cb_do_boundary_change_work(struct work_struct *qos_work)
 	target = max(cb->freqs[cb->cur_level], pol->min);
 
 	if (debug)
-		pr_info("processing work cpu %d min %u max %u target %u req max %u\n",
+		pr_debug("processing work cpu %d min %u max %u target %u req max %u\n",
 			cb->first_cpu, pol->min, pol->max, target, cb->qos_req.pnode.prio);
 
 	if (freq_qos_update_request(&cb->qos_req, target) < 0)
@@ -785,7 +785,7 @@ static int __init cb_init(void)
 {
 	int cpu;
 
-	pr_info("cb init\n");
+	pr_debug("cb init\n");
 	cb_parse_cpufreq();
 	if (cb_init_ctl()) {
 		pr_warn("cb init ctl failed\n");
@@ -803,13 +803,13 @@ static int __init cb_init(void)
 	}
 
 	cb_task = kthread_run(cb_main, NULL, "cb_task");
-	pr_info("cb inited\n");
+	pr_debug("cb inited\n");
 	return 0;
 }
 
 static void __exit cb_exit(void)
 {
-	pr_info("cpufreq bouncing exit\n");
+	pr_debug("cpufreq bouncing exit\n");
 }
 module_init(cb_init);
 module_exit(cb_exit);

@@ -273,7 +273,7 @@ static void delayed_work_func(struct work_struct *work)
 
 	tasktimes = (struct acct_tasktime *)vzalloc(MAX_PID * sizeof(struct acct_tasktime));
 	if (!tasktimes) {
-		pr_err("vmalloc failed\n");
+		pr_debug("vmalloc failed\n");
 		goto again;
 	}
 
@@ -318,7 +318,7 @@ static int register_atd_vendor_hooks(void)
 	/* register vendor hook in kernel/sched/cputime.c */
 	ret = register_trace_android_vh_account_task_time(get_task_time_handler, NULL);
 	if (ret != 0) {
-		pr_err(" ATD: register vendor hook failed!\n");
+		pr_debug(" ATD: register vendor hook failed!\n");
 		return ret;
 	}
 	return 0;
@@ -330,7 +330,7 @@ static int unregister_atd_vendor_hooks(void)
 
 	unregister_trace_android_vh_account_task_time(get_task_time_handler, NULL);
 	if (ret != 0) {
-		pr_err(" ATD: unregister vendor hook failed!\n");
+		pr_debug(" ATD: unregister vendor hook failed!\n");
 		return ret;
 	}
 	return 0;
@@ -347,31 +347,31 @@ static int __init proc_task_overtime_init(void)
 
 	atd = proc_mkdir("atd", NULL);
 	if (!atd) {
-		pr_err("can't create atd dir\n");
+		pr_debug("can't create atd dir\n");
 		goto ERROR_INIT_DIR;
 	}
 
 	pentry = proc_create("abnormal_task", 0, atd, &tsk_proc_fops);
 	if (!pentry) {
-		pr_err("create abnormal_task proc failed\n");
+		pr_debug("create abnormal_task proc failed\n");
 		goto ERROR_INIT_PROC;
 	}
 
 	pentry = proc_create("atd_enable", 0, atd, &atd_enable_proc_fops);
 	if (!pentry) {
-		pr_err("create atd_enable proc failed\n");
+		pr_debug("create atd_enable proc failed\n");
 		goto ERROR_INIT_PROC;
 	}
 
 	pentry = proc_create("atd_level", 0, atd, &atd_level_proc_fops);
 	if (!pentry) {
-		pr_err("create atd_level proc failed\n");
+		pr_debug("create atd_level proc failed\n");
 		goto ERROR_INIT_PROC;
 	}
 
 	queue = create_workqueue("detect abnormal task");
 	if (!queue) {
-		pr_err("create workqueue failed!\n");
+		pr_debug("create workqueue failed!\n");
 		goto ERROR_INIT_PROC;
 	}
 

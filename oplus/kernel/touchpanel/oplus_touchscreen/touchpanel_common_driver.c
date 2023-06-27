@@ -7289,13 +7289,13 @@ int init_power_control(struct touchpanel_data *ts)
 		if (regulator_count_voltages(ts->hw_res.vcc_1v8) > 0) {
 			ret = regulator_set_voltage(ts->hw_res.vcc_1v8, 1800000, 1800000);
 			if (ret) {
-				dev_err(ts->dev, "Regulator set_vtg failed vcc_i2c rc = %d\n", ret);
+				dev_dbg(ts->dev, "Regulator set_vtg failed vcc_i2c rc = %d\n", ret);
 				goto regulator_vcc_1v8_put;
 			}
 
 			ret = regulator_set_load(ts->hw_res.vcc_1v8, 200000);
 			if (ret < 0) {
-				dev_err(ts->dev, "Failed to set vcc_1v8 mode(rc:%d)\n", ret);
+				dev_dbg(ts->dev, "Failed to set vcc_1v8 mode(rc:%d)\n", ret);
 				goto regulator_vcc_1v8_put;
 			}
 		}
@@ -7313,13 +7313,13 @@ int init_power_control(struct touchpanel_data *ts)
 				ret = regulator_set_voltage(ts->hw_res.vdd_2v8, 3100000, 3100000);
 			}
 			if (ret) {
-				dev_err(ts->dev, "Regulator set_vtg failed vdd rc = %d\n", ret);
+				dev_dbg(ts->dev, "Regulator set_vtg failed vdd rc = %d\n", ret);
 				goto regulator_vdd_2v8_put;
 			}
 
 			ret = regulator_set_load(ts->hw_res.vdd_2v8, 200000);
 			if (ret < 0) {
-				dev_err(ts->dev, "Failed to set vdd_2v8 mode(rc:%d)\n", ret);
+				dev_dbg(ts->dev, "Failed to set vdd_2v8 mode(rc:%d)\n", ret);
 				goto regulator_vdd_2v8_put;
 			}
 		}
