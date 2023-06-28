@@ -614,6 +614,11 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
 {
 	struct cpufreq_policy *policy = sg_policy->policy;
 	unsigned int freq;
+#ifdef OPLUS_FEATURE_POWER_CPUFREQ
+	unsigned int prev_freq = arch_scale_freq_invariant() ?
+				policy->cpuinfo.max_freq : policy->cur;
+	unsigned int prev_laf = prev_freq * util * 100 / max;
+#endif
 
 	__sugov_expire_frame_boost(sg_policy, time);
 	if (sg_policy->tunables->frame_aware) {
@@ -627,9 +632,6 @@ static unsigned int get_next_freq(struct sugov_policy *sg_policy,
 				policy->cpuinfo.max_freq : policy->cur;
 
 #ifdef OPLUS_FEATURE_POWER_CPUFREQ
-	unsigned int prev_freq = freq;
-	unsigned int prev_laf = prev_freq * util * 100 / max;
-
 	freq = choose_freq(sg_policy, prev_laf);
 	trace_sugov_next_freq_tl(policy->cpu, util, max, freq, prev_laf, prev_freq);
 #else
