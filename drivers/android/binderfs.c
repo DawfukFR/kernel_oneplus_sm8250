@@ -310,7 +310,7 @@ static int binderfs_parse_mount_opts(char *data,
 			kfree(stats);
 			break;
 		default:
-			pr_err("Invalid mount options\n");
+			pr_debug("Invalid mount options\n");
 			return -EINVAL;
 		}
 	}
@@ -329,7 +329,7 @@ static int binderfs_remount(struct super_block *sb, int *flags, char *data)
 		return ret;
 
 	if (prev_stats_mode != info->mount_opts.stats_mode) {
-		pr_err("Binderfs stats mode cannot be changed during a remount\n");
+		pr_debug("Binderfs stats mode cannot be changed during a remount\n");
 		info->mount_opts.stats_mode = prev_stats_mode;
 		return -EINVAL;
 	}

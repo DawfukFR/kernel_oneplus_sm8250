@@ -298,13 +298,13 @@ void binder_selftest_alloc(struct binder_alloc *alloc)
 	mutex_lock(&binder_selftest_lock);
 	if (!binder_selftest_run || !alloc->vma)
 		goto done;
-	pr_info("STARTED\n");
+	pr_debug("STARTED\n");
 	binder_selftest_alloc_offset(alloc, end_offset, 0);
 	binder_selftest_run = false;
 	if (binder_selftest_failures > 0)
-		pr_info("%d tests FAILED\n", binder_selftest_failures);
+		pr_debug("%d tests FAILED\n", binder_selftest_failures);
 	else
-		pr_info("PASSED\n");
+		pr_debug("PASSED\n");
 
 done:
 	mutex_unlock(&binder_selftest_lock);
