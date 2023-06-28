@@ -90,7 +90,7 @@ static int mdss_tp_black_gesture_status(void){
 	/*default disable tp gesture*/
 	//tp add the interface for check black status to ret
 	ret = tp_gesture_enable_flag();
-	pr_err("[TP]%s:ret = %d\n", __func__, ret);
+	pr_debug("[TP]%s:ret = %d\n", __func__, ret);
 	return ret;
 }
 
@@ -526,7 +526,7 @@ static int dsi_panel_reset(struct dsi_panel *panel)
 	int i;
 
 #ifdef OPLUS_BUG_STABILITY
-	pr_err("debug for dsi_panel_reset\n");
+	pr_debug("debug for dsi_panel_reset\n");
 #endif
 #if defined(OPLUS_FEATURE_PXLW_IRIS5)
 	if (iris_is_dual_supported() && panel->is_secondary)
@@ -638,7 +638,7 @@ static int dsi_panel_power_on(struct dsi_panel *panel)
 	int rc = 0;
 
 #ifdef OPLUS_BUG_STABILITY
-	pr_err("debug for dsi_panel_power_on\n");
+	pr_debug("debug for dsi_panel_power_on\n");
 #endif
 #ifdef OPLUS_BUG_STABILITY
 	if (!strstr(panel->oplus_priv.vendor_name,"NT36672C")) {
@@ -660,7 +660,7 @@ static int dsi_panel_power_on(struct dsi_panel *panel)
 	if(panel->nt36523w_ktz8866) {
 		/* add for oslo bringup */
 		/*ktz8866 power*/
-		pr_info("%d %s dis_set_first_level=%d\n", __LINE__, __func__, dis_set_first_level);
+		pr_debug("%d %s dis_set_first_level=%d\n", __LINE__, __func__, dis_set_first_level);
 		rc = turn_on_ktz8866_hw_en(true);
 		if (rc) {
 			DSI_ERR("[%s] failed to turn_on_ktz8866_hw_en, rc=%d\n",
@@ -668,7 +668,7 @@ static int dsi_panel_power_on(struct dsi_panel *panel)
 			goto error_disable_vregs;
 		}
 		rc = lcd_set_bias(true);
-		pr_info("lcd_set_bias(true)\n");
+		pr_debug("lcd_set_bias(true)\n");
 		if (rc) {
 			DSI_ERR("[%s] failed to lcd_set_bias, rc=%d\n",
 				panel->name, rc);
@@ -778,19 +778,19 @@ static int dsi_panel_power_off(struct dsi_panel *panel)
 
 #ifdef OPLUS_BUG_STABILITY
 	int esd_check = get_esd_check_happened();
-	pr_err("debug for dsi_panel_power_off\n");
+	pr_debug("debug for dsi_panel_power_off\n");
 #endif
 
 #ifdef OPLUS_BUG_STABILITY
 	if(!esd_check && mdss_tp_black_gesture_status()) {
 		tp_black_power_on_ff_flag = 0;
-		pr_err("%s : [TP] tp gesture is enable, not to dsi_panel_power_off, tp_black_power_on_ff_flag = %d\n",
+		pr_debug("%s : [TP] tp gesture is enable, not to dsi_panel_power_off, tp_black_power_on_ff_flag = %d\n",
 			__func__, tp_black_power_on_ff_flag);
 		return rc;
 	}
 
 	tp_black_power_on_ff_flag = 1;
-	pr_err("%s:[TP]tp_black_power_on_ff_flag = %d\n",__func__,tp_black_power_on_ff_flag);
+	pr_debug("%s:[TP]tp_black_power_on_ff_flag = %d\n",__func__,tp_black_power_on_ff_flag);
 #endif /*OPLUS_BUG_STABILITY*/
 
 	if (gpio_is_valid(panel->reset_config.disp_en_gpio))
@@ -857,7 +857,7 @@ static int dsi_panel_power_off(struct dsi_panel *panel)
 	if(panel->nt36523w_ktz8866) {
 	/* add for oslo bringup */
 	/*ktz8866 power off*/
-		pr_info("lcd_set_bias false\n");
+		pr_debug("lcd_set_bias false\n");
 		rc = lcd_set_bias(false);
 		if (rc) {
 			DSI_ERR("[%s] failed set lcd_set_bias false, rc=%d\n", panel->name, rc);
@@ -938,10 +938,10 @@ int dsi_panel_tx_cmd_set(struct dsi_panel *panel,
 		&& type != DSI_CMD_READ_SAMSUNG_PANEL_REGISTER_OFF) {
 		#ifdef OPLUS_FEATURE_ADFR
 			if (type != DSI_CMD_FAKEFRAME) {
-			    pr_err("dsi_cmd %s\n", cmd_set_prop_map[type]);
+			    pr_debug("dsi_cmd %s\n", cmd_set_prop_map[type]);
 			}
 		#else
-		        pr_err("dsi_cmd %s\n", cmd_set_prop_map[type]);
+		        pr_debug("dsi_cmd %s\n", cmd_set_prop_map[type]);
 		#endif
 	}
 
@@ -1116,7 +1116,7 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 
 #ifdef OPLUS_BUG_STABILITY
 	if ((get_oplus_display_scene() == OPLUS_DISPLAY_AOD_SCENE) && ( bl_lvl == 1)) {
-		pr_err("dsi_cmd AOD mode return bl_lvl:%d\n",bl_lvl);
+		pr_debug("dsi_cmd AOD mode return bl_lvl:%d\n",bl_lvl);
 		return 0;
 	}
 
@@ -1130,7 +1130,7 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 
 	if (panel->is_hbm_enabled) {
 		if ((bl_lvl != 0)) {
-			pr_err("backlight smooth check racing issue is_hbm_enabled\n");
+			pr_debug("backlight smooth check racing issue is_hbm_enabled\n");
 			return 0;
 		} else {
 			if (!strcmp(panel->name,"boe nt37800 amoled fhd+ panel with DSC")) {
@@ -1141,12 +1141,12 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 	}
 
 	if((bl_lvl == 0) && oplus_display_get_hbm_mode()) {
-		pr_err("set backlight 0 and recovery hbm to 0\n");
+		pr_debug("set backlight 0 and recovery hbm to 0\n");
 		__oplus_display_set_hbm(0);
 	}
 
 	if (oplus_display_get_hbm_mode()) {
-		pr_err("backlight smooth check racing issue oplus_display_get_hbm_mode\n");
+		pr_debug("backlight smooth check racing issue oplus_display_get_hbm_mode\n");
 		return rc;
 	}
 
@@ -1160,9 +1160,9 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 	if (oplus_dimlayer_bl_enabled != oplus_dimlayer_bl_enable_real) {
 		oplus_dimlayer_bl_enable_real = oplus_dimlayer_bl_enabled;
 		if (oplus_dimlayer_bl_enable_real) {
-			pr_err("Enter DC backlight\n");
+			pr_debug("Enter DC backlight\n");
 		} else {
-			pr_err("Exit DC backlight\n");
+			pr_debug("Exit DC backlight\n");
 		}
 	}
 
@@ -1250,12 +1250,12 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 				enable_global_hbm_flags = 1;
 				rc = dsi_panel_tx_cmd_set(panel, DSI_CMD_HBM_ENTER_SWITCH);
 				if (rc < 0)
-					pr_err("send DSI_CMD_HBM_ENTER_SWITCH fail\n");
+					pr_debug("send DSI_CMD_HBM_ENTER_SWITCH fail\n");
 			} else if(enable_global_hbm_flags) {
 				enable_global_hbm_flags = 0;
 				rc = dsi_panel_tx_cmd_set(panel, DSI_CMD_HBM_EXIT_SWITCH);
 				if (rc < 0)
-					pr_err("send DSI_CMD_HBM_ENTER_SWITCH fail\n");
+					pr_debug("send DSI_CMD_HBM_ENTER_SWITCH fail\n");
 			}
 		} else if (!strcmp(panel->name,"nt36672c dsjm fhd plus video mode dsi panel")) {
 			/* do nothing */
@@ -1283,7 +1283,7 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 				rc = ops->transfer(dsi->host, &msg);
 
 			if (rc < 0)
-				pr_err("failed to backlight bl_lvl %d - ret=%d\n", bl_lvl, rc);
+				pr_debug("failed to backlight bl_lvl %d - ret=%d\n", bl_lvl, rc);
 		}
 	}
 #endif /* OPLUS_BUG_STABILITY */
@@ -1311,22 +1311,22 @@ static int dsi_panel_update_backlight(struct dsi_panel *panel,
 			if (!panel->oplus_priv.low_light_gamma_is_adjusted) {
 				rc = dsi_panel_tx_cmd_set(panel, DSI_GAMMA_LOWBL_COMMAND);
 				if (rc < 0) {
-					pr_err("send DSI_GAMMA_LOWBL_COMMAND fail\n");
+					pr_debug("send DSI_GAMMA_LOWBL_COMMAND fail\n");
 					panel->oplus_priv.low_light_gamma_is_adjusted = false;
 				} else {
 					panel->oplus_priv.low_light_gamma_is_adjusted = true;
-					pr_info("bl_lvl=%d, send DSI_GAMMA_LOWBL_COMMAND ok\n", bl_lvl);
+					pr_debug("bl_lvl=%d, send DSI_GAMMA_LOWBL_COMMAND ok\n", bl_lvl);
 				}
 			}
 		} else if (bl_lvl > panel->oplus_priv.low_light_adjust_gamma_level){
 			if (panel->oplus_priv.low_light_gamma_is_adjusted) {
 				rc = dsi_panel_tx_cmd_set(panel, DSI_GAMMA_NOMAL_COMMAND);
 				if (rc < 0) {
-					pr_err("send DSI_GAMMA_LOWBL_COMMAND fail\n");
+					pr_debug("send DSI_GAMMA_LOWBL_COMMAND fail\n");
 					panel->oplus_priv.low_light_gamma_is_adjusted = true;
 				} else {
 					panel->oplus_priv.low_light_gamma_is_adjusted = false;
-					pr_info("bl_lvl=%d, send DSI_GAMMA_NOMAL_COMMAND ok\n", bl_lvl);
+					pr_debug("bl_lvl=%d, send DSI_GAMMA_NOMAL_COMMAND ok\n", bl_lvl);
 				}
 			}
 		}
@@ -1402,7 +1402,7 @@ int dsi_panel_set_backlight(struct dsi_panel *panel, u32 bl_lvl)
 #ifdef OPLUS_BUG_STABILITY
 	/* Add for silence and sau reboot */
 	if(lcd_closebl_flag) {
-		pr_err("silence reboot we should set backlight to zero\n");
+		pr_debug("silence reboot we should set backlight to zero\n");
 		bl_lvl = 0;
 	} else if (bl_lvl > 0) {
 		lcd_closebl_flag_fp = 0;
@@ -4329,7 +4329,7 @@ static int dsi_panel_parse_esd_config(struct dsi_panel *panel)
 		case MSM_BOOT_MODE__WLAN:
 		case MSM_BOOT_MODE__FACTORY:
 			esd_config->esd_enabled = 0x0;
-			pr_err("%s force disable esd check while in rf,wlan and factory mode, esd staus: 0x%x\n",
+			pr_debug("%s force disable esd check while in rf,wlan and factory mode, esd staus: 0x%x\n",
 						__func__, esd_config->esd_enabled);
 			break;
 
@@ -5134,11 +5134,11 @@ int dsi_panel_pre_prepare(struct dsi_panel *panel)
 			}
 			gpio_set_value(panel->reset_config.reset_gpio, 0);
 			usleep_range(9000, 10000);
-			pr_err("%s: reset gpio 0\n", __func__);
+			pr_debug("%s: reset gpio 0\n", __func__);
 		}
 		if ((0 == mdss_tp_black_gesture_status()) || (1 == tp_black_power_on_ff_flag)) {
 			tp_black_power_on_ff_flag = 0;
-			pr_info("%s:[TP] tp_black_power_on_ff_flag = %d\n",__func__,tp_black_power_on_ff_flag);
+			pr_debug("%s:[TP] tp_black_power_on_ff_flag = %d\n",__func__,tp_black_power_on_ff_flag);
 			dsi_panel_1p8_on_off(panel,true);
 			rc = dsi_pwr_enable_regulator(&panel->power_info, true);
 			if (rc) {
@@ -5235,7 +5235,7 @@ int dsi_panel_set_lp1(struct dsi_panel *panel)
 	}
 
 #ifdef OPLUS_BUG_STABILITY
-	pr_err("debug for dsi_panel_set_lp1\n");
+	pr_debug("debug for dsi_panel_set_lp1\n");
 #endif
 
 	mutex_lock(&panel->panel_lock);
@@ -5282,7 +5282,7 @@ int dsi_panel_set_lp2(struct dsi_panel *panel)
 	}
 
 #ifdef OPLUS_BUG_STABILITY
-	pr_err("debug for dsi_panel_set_lp2\n");
+	pr_debug("debug for dsi_panel_set_lp2\n");
 #endif
 
 	mutex_lock(&panel->panel_lock);
@@ -5311,7 +5311,7 @@ int dsi_panel_set_nolp(struct dsi_panel *panel)
 	}
 
 #ifdef OPLUS_BUG_STABILITY
-	pr_err("debug for dsi_panel_set_nolp\n");
+	pr_debug("debug for dsi_panel_set_nolp\n");
 #endif
 
 	mutex_lock(&panel->panel_lock);
@@ -5689,7 +5689,7 @@ int dsi_panel_fps_change(struct dsi_panel *panel)
 			}
 	}
 	fps_tmp = panel->cur_mode->timing.refresh_rate;
-	pr_info("fps_tmp = %d\n", fps_tmp);
+	pr_debug("fps_tmp = %d\n", fps_tmp);
 	return rc;
 }
 
@@ -5790,7 +5790,7 @@ int dsi_panel_enable(struct dsi_panel *panel)
 
 
 #ifdef OPLUS_BUG_STABILITY
-	pr_err("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 #endif
 
 #ifdef OPLUS_BUG_STABILITY
@@ -5921,7 +5921,7 @@ int dsi_panel_disable(struct dsi_panel *panel)
 	}
 
 #ifdef OPLUS_BUG_STABILITY
-	pr_err("%s\n", __func__);
+	pr_debug("%s\n", __func__);
 #endif
 
 #if defined(OPLUS_FEATURE_PXLW_IRIS5)
@@ -6008,7 +6008,7 @@ int dsi_panel_unprepare(struct dsi_panel *panel)
 #ifdef OPLUS_BUG_STABILITY
 	if (strstr(panel->oplus_priv.vendor_name,"NT36672C")) {
 		if (1 != tp_gesture_enable_flag()) {
-			pr_info("%s:%d tp gesture is off set reset 0\n", __func__, __LINE__);
+			pr_debug("%s:%d tp gesture is off set reset 0\n", __func__, __LINE__);
 			if (gpio_is_valid(panel->reset_config.reset_gpio))
 				gpio_set_value(panel->reset_config.reset_gpio, 0);
 			usleep_range(5000, 6000);

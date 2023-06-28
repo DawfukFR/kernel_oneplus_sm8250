@@ -940,7 +940,7 @@ static u32 _sde_crtc_get_displays_affected(struct drm_crtc *crtc,
 	int i;
 
 	if (!crtc || !state) {
-		pr_err("Invalid crtc or state\n");
+		pr_debug("Invalid crtc or state\n");
 		return 0;
 	}
 
@@ -2566,7 +2566,7 @@ void sde_crtc_complete_commit(struct drm_crtc *crtc,
 					exp_ktime = ktime_add_ms(oplus_onscreenfp_pressed_time, 4);
 					if (ktime_compare_safe(exp_ktime, vblanktime) > 0) {
 						target_vblank++;
-						pr_err("hbm setting may hit into hardware irq and soft update, wait one more vblank\n");
+						pr_debug("hbm setting may hit into hardware irq and soft update, wait one more vblank\n");
 					}
 				}
 
@@ -2574,7 +2574,7 @@ void sde_crtc_complete_commit(struct drm_crtc *crtc,
 						target_vblank <= drm_crtc_vblank_count(crtc),
 						msecs_to_jiffies(50));
 				if (!ret)
-					pr_err("[fingerprint CRTC:%d:%s] vblank wait timed out\n",
+					pr_debug("[fingerprint CRTC:%d:%s] vblank wait timed out\n",
 					       crtc->base.id, crtc->name);
 
 				if (current_vblank == drm_crtc_vblank_count(crtc)) {
@@ -2583,7 +2583,7 @@ void sde_crtc_complete_commit(struct drm_crtc *crtc,
 							msecs_to_jiffies(17));
 				}
 			}
-			pr_err("fingerprint status: %s",
+			pr_debug("fingerprint status: %s",
 			       blank ? "pressed" : "up");
 			msm_drm_notifier_call_chain(MSM_DRM_ONSCREENFINGERPRINT_EVENT,
 					&notifier_data);
@@ -3429,7 +3429,7 @@ static void sde_crtc_atomic_flush(struct drm_crtc *crtc,
 		if (display->panel->oplus_priv.dfps_idle_off)
 			idle_time = 0;
 	} else {
-		pr_err("%s : display or display->panel is NULL\n", __func__);
+		pr_debug("%s : display or display->panel is NULL\n", __func__);
 	}
 #endif /*OPLUS_BUG_STABILITY*/
 
