@@ -776,7 +776,7 @@ static void i2c_oplus_gpio_reset(struct geni_i2c_dev *gi2c)
 	static bool i2c_reset_processing = false;
 	int boot_mode = get_boot_mode();
 
-	//dev_err(gi2c->dev, "%s: start, return\n", __func__);
+	//dev_dbg(gi2c->dev, "%s: start, return\n", __func__);
 	if (gi2c == NULL)
 		return;
 
@@ -785,22 +785,22 @@ static void i2c_oplus_gpio_reset(struct geni_i2c_dev *gi2c)
 			&& (boot_mode != MSM_BOOT_MODE__SILENCE)
 			&& (boot_mode != MSM_BOOT_MODE__SAU)
 			&& (boot_mode != MSM_BOOT_MODE__CHARGE)) {
-		dev_err(gi2c->dev, "%s: get_boot_mode[%d], return\n", __func__, boot_mode);
+		dev_dbg(gi2c->dev, "%s: get_boot_mode[%d], return\n", __func__, boot_mode);
 		return;
 	}
 
 	if (i2c_reset_processing == true) {
-		dev_err(gi2c->dev, "%s: i2c_reset is processing, return\n", __func__);
+		dev_dbg(gi2c->dev, "%s: i2c_reset is processing, return\n", __func__);
 		return;
 	}
 
 	i2c_reset_processing = true;
 
 	if (!IS_ERR_OR_NULL(gi2c->i2c_rsc.geni_gpio_pulldown)) {
-		dev_err(gi2c->dev, "%s: set geni_gpio_pulldown\n", __func__);
+		dev_dbg(gi2c->dev, "%s: set geni_gpio_pulldown\n", __func__);
 		ret = pinctrl_select_state(gi2c->i2c_rsc.geni_pinctrl, gi2c->i2c_rsc.geni_gpio_pulldown);
 		if (ret) {
-			dev_err(gi2c->dev, "%s: error pinctrl_select_state pulldown, ret:%d\n", __func__, ret);
+			dev_dbg(gi2c->dev, "%s: error pinctrl_select_state pulldown, ret:%d\n", __func__, ret);
 			goto err;
 		}
 	} else {
@@ -810,24 +810,24 @@ static void i2c_oplus_gpio_reset(struct geni_i2c_dev *gi2c)
 	for (i = 0; i < 220; i++) {
 		usleep_range(10000, 11000);
 		if (oplus_vooc_get_fastchg_started() == true && oplus_vooc_get_fastchg_ing() == false) {
-			dev_err(gi2c->dev, "%s: vooc ready to start, don't pull down i2c, i:%d\n", __func__, i);
+			dev_dbg(gi2c->dev, "%s: vooc ready to start, don't pull down i2c, i:%d\n", __func__, i);
 			break;
 		}
 	}
 	oplus_set_fg_i2c_err_occured(true);
 
 	if (!IS_ERR_OR_NULL(gi2c->i2c_rsc.geni_gpio_pullup)) {
-		dev_err(gi2c->dev, "%s: set geni_gpio_pullup\n", __func__);
+		dev_dbg(gi2c->dev, "%s: set geni_gpio_pullup\n", __func__);
 		ret = pinctrl_select_state(gi2c->i2c_rsc.geni_pinctrl, gi2c->i2c_rsc.geni_gpio_pullup);
 		if (ret) {
-			dev_err(gi2c->dev, "%s:error pinctrl_select_state pullup, ret:%d\n", __func__, ret);
+			dev_dbg(gi2c->dev, "%s:error pinctrl_select_state pullup, ret:%d\n", __func__, ret);
 		}
 	}
 	if (!IS_ERR_OR_NULL(gi2c->i2c_rsc.geni_gpio_active)) {
-		dev_err(gi2c->dev, "%s: set geni_gpio_active\n", __func__);
+		dev_dbg(gi2c->dev, "%s: set geni_gpio_active\n", __func__);
 		ret = pinctrl_select_state(gi2c->i2c_rsc.geni_pinctrl, gi2c->i2c_rsc.geni_gpio_active);
 		if (ret) {
-			dev_err(gi2c->dev, "%s:error pinctrl_select_state active, ret:%d\n", __func__, ret);
+			dev_dbg(gi2c->dev, "%s:error pinctrl_select_state active, ret:%d\n", __func__, ret);
 			goto err;
 		}
 	} else {
@@ -835,7 +835,7 @@ static void i2c_oplus_gpio_reset(struct geni_i2c_dev *gi2c)
 	}
 
 	i2c_reset_processing = false;
-	dev_err(gi2c->dev, "%s: gpio reset successful id:%d\n", __func__, gi2c->adap.nr);
+	dev_dbg(gi2c->dev, "%s: gpio reset successful id:%d\n", __func__, gi2c->adap.nr);
 	return;
 
 err:
@@ -906,7 +906,7 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
 
 		ret = geni_se_select_mode(gi2c->base, mode);
 		if (ret) {
-			dev_err(gi2c->dev, "%s: Error mode init %d:%d:%d\n",
+			dev_dbg(gi2c->dev, "%s: Error mode init %d:%d:%d\n",
 				__func__, mode, i, msgs[i].len);
 			break;
 		}
@@ -1023,11 +1023,11 @@ static int geni_i2c_xfer(struct i2c_adapter *adap,
 #ifdef OPLUS_FEATURE_CHG_BASIC
 		if(msgs[i].addr == FG_DEVICE_ADDR || msgs[i].addr == DA9313_DEVICE_ADDR) {
 			if (gi2c->err) {
-				dev_err(gi2c->dev, "gi2c->adap.nr[%d], err_count[%d], msgs[i].addr[0x%x]\n", gi2c->adap.nr, err_count, msgs[i].addr);
+				dev_dbg(gi2c->dev, "gi2c->adap.nr[%d], err_count[%d], msgs[i].addr[0x%x]\n", gi2c->adap.nr, err_count, msgs[i].addr);
 				if (err_count > MIN_RESET_COUNT && err_count < MAX_RESET_COUNT) {
 					i2c_oplus_gpio_reset(gi2c);
 				} else {
-					dev_err(gi2c->dev, "err_count(%d) >= %d so not reset\n", err_count, MAX_RESET_COUNT);
+					dev_dbg(gi2c->dev, "err_count(%d) >= %d so not reset\n", err_count, MAX_RESET_COUNT);
 				}
 				err_count++;
 			} else  {
@@ -1092,14 +1092,14 @@ static int geni_i2c_probe(struct platform_device *pdev)
 				"qcom,wrapper-core", 0);
 	if (IS_ERR_OR_NULL(wrapper_ph_node)) {
 		ret = PTR_ERR(wrapper_ph_node);
-		dev_err(&pdev->dev, "No wrapper core defined\n");
+		dev_dbg(&pdev->dev, "No wrapper core defined\n");
 		return ret;
 	}
 	wrapper_pdev = of_find_device_by_node(wrapper_ph_node);
 	of_node_put(wrapper_ph_node);
 	if (IS_ERR_OR_NULL(wrapper_pdev)) {
 		ret = PTR_ERR(wrapper_pdev);
-		dev_err(&pdev->dev, "Cannot retrieve wrapper device\n");
+		dev_dbg(&pdev->dev, "Cannot retrieve wrapper device\n");
 		return ret;
 	}
 	gi2c->wrapper_dev = &wrapper_pdev->dev;
@@ -1107,7 +1107,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
 	ret = geni_se_resources_init(&gi2c->i2c_rsc, I2C_CORE2X_VOTE,
 				     (DEFAULT_SE_CLK * DEFAULT_BUS_WIDTH));
 	if (ret) {
-		dev_err(gi2c->dev, "geni_se_resources_init\n");
+		dev_dbg(gi2c->dev, "geni_se_resources_init\n");
 		return ret;
 	}
 
@@ -1115,19 +1115,19 @@ static int geni_i2c_probe(struct platform_device *pdev)
 	gi2c->i2c_rsc.se_clk = devm_clk_get(&pdev->dev, "se-clk");
 	if (IS_ERR(gi2c->i2c_rsc.se_clk)) {
 		ret = PTR_ERR(gi2c->i2c_rsc.se_clk);
-		dev_err(&pdev->dev, "Err getting SE Core clk %d\n", ret);
+		dev_dbg(&pdev->dev, "Err getting SE Core clk %d\n", ret);
 		return ret;
 	}
 	gi2c->i2c_rsc.m_ahb_clk = devm_clk_get(&pdev->dev, "m-ahb");
 	if (IS_ERR(gi2c->i2c_rsc.m_ahb_clk)) {
 		ret = PTR_ERR(gi2c->i2c_rsc.m_ahb_clk);
-		dev_err(&pdev->dev, "Err getting M AHB clk %d\n", ret);
+		dev_dbg(&pdev->dev, "Err getting M AHB clk %d\n", ret);
 		return ret;
 	}
 	gi2c->i2c_rsc.s_ahb_clk = devm_clk_get(&pdev->dev, "s-ahb");
 	if (IS_ERR(gi2c->i2c_rsc.s_ahb_clk)) {
 		ret = PTR_ERR(gi2c->i2c_rsc.s_ahb_clk);
-		dev_err(&pdev->dev, "Err getting S AHB clk %d\n", ret);
+		dev_dbg(&pdev->dev, "Err getting S AHB clk %d\n", ret);
 		return ret;
 	}
 
@@ -1137,7 +1137,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
 
 	gi2c->i2c_rsc.geni_pinctrl = devm_pinctrl_get(&pdev->dev);
 	if (IS_ERR_OR_NULL(gi2c->i2c_rsc.geni_pinctrl)) {
-		dev_err(&pdev->dev, "No pinctrl config specified\n");
+		dev_dbg(&pdev->dev, "No pinctrl config specified\n");
 		ret = PTR_ERR(gi2c->i2c_rsc.geni_pinctrl);
 		return ret;
 	}
@@ -1145,7 +1145,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
 		pinctrl_lookup_state(gi2c->i2c_rsc.geni_pinctrl,
 							PINCTRL_DEFAULT);
 	if (IS_ERR_OR_NULL(gi2c->i2c_rsc.geni_gpio_active)) {
-		dev_err(&pdev->dev, "No default config specified\n");
+		dev_dbg(&pdev->dev, "No default config specified\n");
 		ret = PTR_ERR(gi2c->i2c_rsc.geni_gpio_active);
 		return ret;
 	}
@@ -1153,21 +1153,21 @@ static int geni_i2c_probe(struct platform_device *pdev)
 		pinctrl_lookup_state(gi2c->i2c_rsc.geni_pinctrl,
 							PINCTRL_SLEEP);
 	if (IS_ERR_OR_NULL(gi2c->i2c_rsc.geni_gpio_sleep)) {
-		dev_err(&pdev->dev, "No sleep config specified\n");
+		dev_dbg(&pdev->dev, "No sleep config specified\n");
 		ret = PTR_ERR(gi2c->i2c_rsc.geni_gpio_sleep);
 		return ret;
 	}
 
 	if (of_property_read_bool(pdev->dev.of_node, "qcom,shared")) {
 		gi2c->is_shared = true;
-		dev_info(&pdev->dev, "Multi-EE usecase\n");
+		dev_dbg(&pdev->dev, "Multi-EE usecase\n");
 	}
 #ifdef OPLUS_FEATURE_CHG_BASIC
 	gi2c->i2c_rsc.geni_gpio_pulldown =
 		pinctrl_lookup_state(gi2c->i2c_rsc.geni_pinctrl,
 							PINCTRL_PULLDOWN);
 	if (IS_ERR_OR_NULL(gi2c->i2c_rsc.geni_gpio_pulldown)) {
-		/*dev_err(&pdev->dev, "No pulldown config specified\n");
+		/*dev_dbg(&pdev->dev, "No pulldown config specified\n");
 		ret = PTR_ERR(gi2c->i2c_rsc.geni_gpio_pulldown);
 		return ret;*/
 	}
@@ -1175,7 +1175,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
 		pinctrl_lookup_state(gi2c->i2c_rsc.geni_pinctrl,
 							PINCTRL_PULLUP);
 	if (IS_ERR_OR_NULL(gi2c->i2c_rsc.geni_gpio_pullup)) {
-		/*dev_err(&pdev->dev, "No pulldown config specified\n");
+		/*dev_dbg(&pdev->dev, "No pulldown config specified\n");
 		ret = PTR_ERR(gi2c->i2c_rsc.geni_gpio_pullup);
 		return ret;*/
 	}
@@ -1184,7 +1184,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
 				&gi2c->i2c_rsc.clk_freq_out)) {
 		gi2c->i2c_rsc.clk_freq_out = KHz(400);
 	}
-	dev_info(&pdev->dev, "Bus frequency is set to %dHz\n",
+	dev_dbg(&pdev->dev, "Bus frequency is set to %dHz\n",
 					gi2c->i2c_rsc.clk_freq_out);
 
 #ifdef OPLUS_FEATURE_CHG_BASIC
@@ -1205,13 +1205,13 @@ static int geni_i2c_probe(struct platform_device *pdev)
 
 	gi2c->irq = platform_get_irq(pdev, 0);
 	if (gi2c->irq < 0) {
-		dev_err(gi2c->dev, "IRQ error for i2c-geni\n");
+		dev_dbg(gi2c->dev, "IRQ error for i2c-geni\n");
 		return gi2c->irq;
 	}
 
 	ret = geni_i2c_clk_map_idx(gi2c);
 	if (ret) {
-		dev_err(gi2c->dev, "Invalid clk frequency %d KHz: %d\n",
+		dev_dbg(gi2c->dev, "Invalid clk frequency %d KHz: %d\n",
 				gi2c->i2c_rsc.clk_freq_out, ret);
 		return ret;
 	}
@@ -1220,7 +1220,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
 	if (ret) {
 		ret = dma_set_mask_and_coherent(&pdev->dev, DMA_BIT_MASK(32));
 		if (ret) {
-			dev_err(&pdev->dev, "could not set DMA mask\n");
+			dev_dbg(&pdev->dev, "could not set DMA mask\n");
 			return ret;
 		}
 	}
@@ -1231,7 +1231,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
 	ret = devm_request_irq(gi2c->dev, gi2c->irq, geni_i2c_irq,
 			       IRQF_TRIGGER_HIGH, "i2c_geni", gi2c);
 	if (ret) {
-		dev_err(gi2c->dev, "Request_irq failed:%d: err:%d\n",
+		dev_dbg(gi2c->dev, "Request_irq failed:%d: err:%d\n",
 				   gi2c->irq, ret);
 		return ret;
 	}
@@ -1249,7 +1249,7 @@ static int geni_i2c_probe(struct platform_device *pdev)
 	pm_runtime_enable(gi2c->dev);
 	ret = i2c_add_adapter(&gi2c->adap);
 	if (ret) {
-		dev_err(gi2c->dev, "Add adapter failed\n");
+		dev_dbg(gi2c->dev, "Add adapter failed\n");
 		return ret;
 	}
 
@@ -1315,7 +1315,7 @@ static int geni_i2c_runtime_resume(struct device *dev)
 		u32 se_mode;
 
 		if (unlikely(proto != I2C)) {
-			dev_err(gi2c->dev, "Invalid proto %d\n", proto);
+			dev_dbg(gi2c->dev, "Invalid proto %d\n", proto);
 			se_geni_resources_off(&gi2c->i2c_rsc);
 			return -ENXIO;
 		}
