@@ -4,7 +4,7 @@
 #
 
 #
-# Compiler: ZyC clang version 17.0.0 (https://github.com/llvm/llvm-project ebd0b8a0472b865b7eb6e1a32af97ae31d829033)
+# Compiler: ZyC clang version 17.0.0 (https://github.com/llvm/llvm-project ebbfdca586d5543c13617b15d0cdf5b7fdc4fd4a)
 #
 CONFIG_OPLUS_SYSTEM_KERNEL_QCOM=y
 # CONFIG_OPLUS_SYSTEM_KERNEL_MTK is not set
