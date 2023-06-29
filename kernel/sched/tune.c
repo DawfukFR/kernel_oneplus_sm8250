@@ -955,7 +955,9 @@ static struct cftype files[] = {
 	{ }	/* terminate */
 };
 
+#ifdef CONFIG_DYNAMIC_STUNE_BOOST
 static void dsb_worker(struct work_struct *work);
+#endif
 
 static void
 schedtune_boostgroup_init(struct schedtune *st, int idx)
