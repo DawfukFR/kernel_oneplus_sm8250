@@ -201,7 +201,7 @@ void da9313_dump_registers(void)
         if (rc) {
             chg_err("Couldn't read 0x%02x rc = %d\n", addr, rc);
         } else {
-            pr_err("%s success addr = %d, value = 0x%x\n", 
+            pr_debug("%s success addr = %d, value = 0x%x\n", 
             __func__, addr, val_buf[addr]);
         }
     }
@@ -441,7 +441,7 @@ static int halfv_chip_init(struct chip_da9313 *chip)
 	struct device_node *node = chip->dev->of_node;
 	chip->da9313_hwid_gpio = of_get_named_gpio(node, "oplus,da9313-hwid-gpio", 0);
 	if (chip->da9313_hwid_gpio < 0) {
-		pr_err("da9313_hwid_gpio not specified\n");
+		pr_debug("da9313_hwid_gpio not specified\n");
 		goto HWID_HANDLE;
 	}
 
@@ -755,7 +755,7 @@ static int da9313_driver_probe(struct i2c_client *client, const struct i2c_devic
 
     divider_ic = devm_kzalloc(&client->dev, sizeof(struct chip_da9313), GFP_KERNEL);
     if (!divider_ic) {
-        dev_err(&client->dev, "failed to allocate divider_ic\n");
+        dev_dbg(&client->dev, "failed to allocate divider_ic\n");
         return -ENOMEM;
     }
 

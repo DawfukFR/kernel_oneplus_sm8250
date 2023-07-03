@@ -200,15 +200,15 @@ int oplus_usbtemp_dischg_action(struct oplus_chg_chip *chip)
 		if (chip->chg_ops->set_typec_cc_open != NULL) {
 			chip->chg_ops->set_typec_cc_open();
 		} else {
-			pr_err("[oplus_usbtemp_dischg_action]: set_typec_cc_open is null");
+			pr_debug("[oplus_usbtemp_dischg_action]: set_typec_cc_open is null");
 			if (chip->chg_ops->set_typec_sinkonly != NULL) {
 				chip->chg_ops->set_typec_sinkonly();
 			} else {
-				pr_err("[oplus_usbtemp_dischg_action]: set_typec_sinkonly is null");
+				pr_debug("[oplus_usbtemp_dischg_action]: set_typec_sinkonly is null");
 			}
 		}
 		usleep_range(5000, 5000);
-		pr_err("[oplus_usbtemp_dischg_action]:run_action");
+		pr_debug("[oplus_usbtemp_dischg_action]:run_action");
 	}
 
 #ifndef CONFIG_OPLUS_CHARGER_MTK
@@ -229,7 +229,7 @@ int oplus_usbtemp_dischg_action(struct oplus_chg_chip *chip)
 			rc = pinctrl_select_state(chip->normalchg_gpio.pinctrl, chip->normalchg_gpio.dischg_disable);
 		}
 	} else {
-		pr_err("[oplus_usbtemp_dischg_action]: set vbus down");
+		pr_debug("[oplus_usbtemp_dischg_action]: set vbus down");
 		if (chip->usbtemp_dischg_by_pmic) {
 			/* add for MTK 6373 pmic usbtemp hardware scheme */
 			oplus_chg_set_dischg_enable(true);
@@ -284,14 +284,14 @@ void oplus_usbtemp_recover_func(struct oplus_chg_chip *chip)
 		oplus_set_usbtemp_wakelock(true);
 		do {
 			get_usb_temp(chip);
-			pr_err("[OPLUS_USBTEMP] recovering......");
+			pr_debug("[OPLUS_USBTEMP] recovering......");
 			msleep(2000);
 			count_time++;
 		} while (!(((chip->usb_temp_r < USB_55C || chip->usb_temp_r == USB_100C )
 			&& (chip->usb_temp_l < USB_55C ||  chip->usb_temp_l == USB_100C )) || count_time == 30));
 		oplus_set_usbtemp_wakelock(false);
 		if(count_time == 30) {
-			pr_err("[OPLUS_USBTEMP] temp still high");
+			pr_debug("[OPLUS_USBTEMP] temp still high");
 		} else {
 			chip->dischg_flag = false;
 			chg_err("dischg disable...[%d]\n", chip->usbtemp_volt);
@@ -309,7 +309,7 @@ void oplus_usbtemp_recover_func(struct oplus_chg_chip *chip)
 #ifndef CONFIG_OPLUS_CHARGER_MTK
 			mutex_unlock(&chg->pinctrl_mutex);
 #endif
-			pr_err("[OPLUS_USBTEMP] usbtemp recover");
+			pr_debug("[OPLUS_USBTEMP] usbtemp recover");
 		}
 	}
 	return;
@@ -501,7 +501,7 @@ static int oplus_chg_track_upload_usbtemp_info(
 			OPLUS_CHG_TRACK_CURX_INFO_LEN - index, "%s", power_info);
 
 	schedule_delayed_work(&chip->usbtemp_load_trigger_work, 0);
-	pr_info("%s\n", chip->usbtemp_load_trigger.crux_info);
+	pr_debug("%s\n", chip->usbtemp_load_trigger.crux_info);
 
 	return 0;
 }
@@ -638,20 +638,20 @@ int oplus_usbtemp_monitor_common(void *data)
 	if (chip->usbtemp_temp_up_time_thr <= 0) {
 		chip->usbtemp_temp_up_time_thr = 30;
 	}
-	pr_err("[%s]:run first chip->usbtemp_max_temp_thr[%d], chip->usbtemp_temp_up_time_thr[%d]!",
+	pr_debug("[%s]:run first chip->usbtemp_max_temp_thr[%d], chip->usbtemp_temp_up_time_thr[%d]!",
 		__func__, chip->usbtemp_max_temp_thr, chip->usbtemp_temp_up_time_thr);
 	while (!kthread_should_stop()) {
 		if(chip->chg_ops->oplus_usbtemp_monitor_condition != NULL){
 			wait_event_interruptible(chip->oplus_usbtemp_wq, chip->usbtemp_check);
 		} else {
-			pr_err("[oplus_usbtemp_monitor_main]:condition pointer is NULL");
+			pr_debug("[oplus_usbtemp_monitor_main]:condition pointer is NULL");
 			return 0;
 		}
 		if(chip->dischg_flag == true){
 			goto dischg;
 		}
 		if(chip->chg_ops->get_usbtemp_volt == NULL){
-			pr_err("[oplus_usbtemp_monitor_main]:get_usbtemp_volt is NULL");
+			pr_debug("[oplus_usbtemp_monitor_main]:get_usbtemp_volt is NULL");
 			return 0;
 		}
 		get_usb_temp(chip);
@@ -678,7 +678,7 @@ int oplus_usbtemp_monitor_common(void *data)
 		//condition1  :the temp is higher than 57
 		if (chip->tbatt_temp/10 <= USB_50C &&(((chip->usb_temp_l >= chip->usbtemp_max_temp_thr) && (chip->usb_temp_l < USB_100C))
 			|| ((chip->usb_temp_r >= chip->usbtemp_max_temp_thr) && (chip->usb_temp_r < USB_100C)))) {
-			pr_err("in loop 1");
+			pr_debug("in loop 1");
 			for (i = 1; i < retry_cnt; i++) {
 				mdelay(RETRY_CNT_DELAY);
 				get_usb_temp(chip);
@@ -686,7 +686,7 @@ int oplus_usbtemp_monitor_common(void *data)
 					count_r++;
 				if (chip->usb_temp_l >= chip->usbtemp_max_temp_thr && chip->usb_temp_l < USB_100C)
 					count_l++;
-				pr_err("countl : %d",count_l);
+				pr_debug("countl : %d",count_l);
 			}
 			if (count_r >= retry_cnt || count_l >= retry_cnt) {
 				if (!IS_ERR_OR_NULL(chip->normalchg_gpio.dischg_enable) ||
@@ -704,7 +704,7 @@ int oplus_usbtemp_monitor_common(void *data)
 		}
 		if (chip->tbatt_temp/10 > USB_50C && (((chip->usb_temp_l >= chip->tbatt_temp/10 + 7) && (chip->usb_temp_l < USB_100C))
 			|| ((chip->usb_temp_r >= chip->tbatt_temp/10 + 7) && (chip->usb_temp_r < USB_100C)))) {
-			pr_err("in loop 1");
+			pr_debug("in loop 1");
 			for (i = 1; i <= retry_cnt; i++) {
 				mdelay(RETRY_CNT_DELAY);
 				get_usb_temp(chip);
@@ -712,7 +712,7 @@ int oplus_usbtemp_monitor_common(void *data)
 					count_r++;
 				if ((chip->usb_temp_l >= chip->tbatt_temp/10 + 7) && chip->usb_temp_l < USB_100C)
 					count_l++;
-				pr_err("countl : %d", count_l);
+				pr_debug("countl : %d", count_l);
 			}
 			if (count_r >= retry_cnt || count_l >= retry_cnt) {
 				if (!IS_ERR_OR_NULL(chip->normalchg_gpio.dischg_enable) ||
@@ -729,7 +729,7 @@ int oplus_usbtemp_monitor_common(void *data)
 			last_usb_temp_l = chip->usb_temp_l;
 		}
 		if(condition1 == true){
-			pr_err("jump_to_dischg");
+			pr_debug("jump_to_dischg");
 			goto dischg;
 		}
 
@@ -751,7 +751,7 @@ int oplus_usbtemp_monitor_common(void *data)
 						count_r++;
 					if ((chip->usb_temp_l - last_usb_temp_l) >= 3 && chip->usb_temp_l < USB_100C)
 						count_l++;
-					pr_err("countl : %d,countr : %d", count_l, count_r);
+					pr_debug("countl : %d,countr : %d", count_l, count_r);
 				}
 				current_temp_l = chip->usb_temp_l;
 				current_temp_r = chip->usb_temp_r;
@@ -816,7 +816,7 @@ int oplus_usbtemp_monitor_common(void *data)
 		}
 		msleep(delay);
 		if (usbtemp_debug & OPEN_LOG_BIT) {
-			pr_err("usbtemp: delay %d",delay);
+			pr_debug("usbtemp: delay %d",delay);
 			chg_err("==================usbtemp_volt_l[%d], usb_temp_l[%d], usbtemp_volt_r[%d], usb_temp_r[%d]\n",
 				chip->usbtemp_volt_l,chip->usb_temp_l, chip->usbtemp_volt_r, chip->usb_temp_r);
 		}
@@ -1154,7 +1154,7 @@ bool oplus_usbtemp_change_curr_range(struct oplus_chg_chip *chip, int retry_cnt,
 			if ((chip->usb_temp_l - last_curr_change_usb_temp_l) >= OPLUS_USBTEMP_CURR_CHANGE_TEMP
 					&& chip->usb_temp_l < USB_100C)
 				count_curr_l++;
-			pr_err("countl : %d,countr : %d", count_curr_l, count_curr_r);
+			pr_debug("countl : %d,countr : %d", count_curr_l, count_curr_r);
 		}
 		current_curr_change_temp_l = chip->usb_temp_l;
 		current_curr_change_temp_r = chip->usb_temp_r;
@@ -1190,7 +1190,7 @@ bool oplus_usbtemp_trigger_for_high_temp(struct oplus_chg_chip *chip, int retry_
 		return false;
 
 	if (oplus_usbtemp_condition_temp_high(chip)) {
-		pr_err("in usbtemp higher than 57 or 69!\n");
+		pr_debug("in usbtemp higher than 57 or 69!\n");
 		for (i = 1; i < retry_cnt; i++) {
 			mdelay(RETRY_CNT_DELAY);
 			get_usb_temp(chip);
@@ -1205,7 +1205,7 @@ bool oplus_usbtemp_trigger_for_high_temp(struct oplus_chg_chip *chip, int retry_
 				if (chip->usb_temp_l >= chip->usbtemp_ntc_temp_high && chip->usb_temp_l < USB_100C)
 				count_l++;
 			}
-			pr_err("countl : %d countr : %d", count_l, count_r);
+			pr_debug("countl : %d countr : %d", count_l, count_r);
 		}
 	}
 	if (count_r >= retry_cnt || count_l >= retry_cnt) {
@@ -1224,7 +1224,7 @@ bool oplus_usbtemp_trigger_for_rise_fast_temp(struct oplus_chg_chip *chip, int r
 		return false;
 
 	if (oplus_usbtemp_temp_rise_fast_with_batt_temp(chip)) {
-		pr_err("in usbtemp rise fast with usbtemp!\n");
+		pr_debug("in usbtemp rise fast with usbtemp!\n");
 		for (i = 1; i <= retry_cnt; i++) {
 			mdelay(RETRY_CNT_DELAY);
 			get_usb_temp(chip);
@@ -1243,7 +1243,7 @@ bool oplus_usbtemp_trigger_for_rise_fast_temp(struct oplus_chg_chip *chip, int r
 						&& chip->usb_temp_l < USB_100C)
 					count_l++;
 			}
-			pr_err("countl : %d countr : %d", count_l, count_r);
+			pr_debug("countl : %d countr : %d", count_l, count_r);
 		}
 		if (count_r >= retry_cnt || count_l >= retry_cnt) {
 			return true;
@@ -1289,7 +1289,7 @@ bool oplus_usbtemp_trigger_for_rise_fast_without_temp(struct oplus_chg_chip *chi
 				if (oplus_usbtemp_judge_temp_gap(chip, current_temp_l, last_usb_temp_l)
 						&& chip->usb_temp_l < USB_100C)
 					count_l++;
-				pr_err("countl : %d,countr : %d", count_l, count_r);
+				pr_debug("countl : %d,countr : %d", count_l, count_r);
 			}
 			current_temp_l = chip->usb_temp_l;
 			current_temp_r = chip->usb_temp_r;
@@ -1353,20 +1353,20 @@ int oplus_usbtemp_monitor_common_new_method(void *data)
 	if (chip->usbtemp_temp_up_time_thr <= 0) {
 		chip->usbtemp_temp_up_time_thr = 30;
 	}
-	pr_err("[%s]:run first chip->usbtemp_max_temp_thr[%d], chip->usbtemp_temp_up_time_thr[%d]!",
+	pr_debug("[%s]:run first chip->usbtemp_max_temp_thr[%d], chip->usbtemp_temp_up_time_thr[%d]!",
 		__func__, chip->usbtemp_max_temp_thr, chip->usbtemp_temp_up_time_thr);
 	while (!kthread_should_stop()) {
 		if(chip->chg_ops->oplus_usbtemp_monitor_condition != NULL) {
 			wait_event_interruptible(chip->oplus_usbtemp_wq_new_method, chip->usbtemp_check);
 		} else {
-			pr_err("[oplus_usbtemp_monitor_common_new_method]:condition pointer is NULL");
+			pr_debug("[oplus_usbtemp_monitor_common_new_method]:condition pointer is NULL");
 			return 0;
 		}
 		if(chip->dischg_flag == true) {
 			goto dischg;
 		}
 		if(chip->chg_ops->get_usbtemp_volt == NULL) {
-			pr_err("[oplus_usbtemp_monitor_common_new_method]:get_usbtemp_volt is NULL");
+			pr_debug("[oplus_usbtemp_monitor_common_new_method]:get_usbtemp_volt is NULL");
 			return 0;
 		}
 		get_usb_temp(chip);
@@ -1483,7 +1483,7 @@ int oplus_usbtemp_monitor_common_new_method(void *data)
 			last_usb_temp_l = chip->usb_temp_l;
 		}
 		if(condition1 == true) {
-			pr_err("jump_to_dischg");
+			pr_debug("jump_to_dischg");
 			goto dischg;
 		}
 
@@ -1535,7 +1535,7 @@ int oplus_usbtemp_monitor_common_new_method(void *data)
 		msleep(delay);
 		chip->usbtemp_pre_batt_current = batt_current;
 		if (usbtemp_debug & OPEN_LOG_BIT) {
-			pr_err("usbtemp: delay %d", delay);
+			pr_debug("usbtemp: delay %d", delay);
 			chg_err("==================usbtemp_volt_l[%d], usb_temp_l[%d], usbtemp_volt_r[%d], usb_temp_r[%d]\n",
 				chip->usbtemp_volt_l, chip->usb_temp_l, chip->usbtemp_volt_r, chip->usb_temp_r);
 		}

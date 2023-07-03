@@ -37,7 +37,7 @@ void sendnlmsg(char *msg)
     }
     skb_1 = alloc_skb(len, GFP_KERNEL);
     if (!skb_1) {
-        pr_err("alloc_skb error\n");
+        pr_debug("alloc_skb error\n");
         return;
     }
 
@@ -50,10 +50,10 @@ void sendnlmsg(char *msg)
     if( (gf_dev->notify_tpinfo_flag != 0) && ((fp_nl_msg.netlink_cmd == GF_NET_EVENT_TP_TOUCHDOWN) || (fp_nl_msg.netlink_cmd == GF_NET_EVENT_TP_TOUCHUP))) {
         fp_nl_msg.tp_info = fp_tpinfo;
         memcpy(NLMSG_DATA(nlh), &fp_nl_msg , sizeof(struct netlink_msg_info));
-        pr_err("send msg touch_state = %d\n", fp_tpinfo.touch_state);
-        pr_err("send msg area_rate = %d\n", fp_tpinfo.area_rate);
-        pr_err("send msg x = %d\n", fp_tpinfo.x);
-        pr_err("send msg y = %d\n", fp_tpinfo.y);
+        pr_debug("send msg touch_state = %d\n", fp_tpinfo.touch_state);
+        pr_debug("send msg area_rate = %d\n", fp_tpinfo.area_rate);
+        pr_debug("send msg x = %d\n", fp_tpinfo.x);
+        pr_debug("send msg y = %d\n", fp_tpinfo.y);
     } else if (nlh != NULL) {
         memcpy(NLMSG_DATA(nlh), msg, sizeof(char));
         pr_debug("send message: %d\n", *(char *)NLMSG_DATA(nlh));
@@ -61,7 +61,7 @@ void sendnlmsg(char *msg)
 
     ret = netlink_unicast(nl_sk, skb_1, pid, MSG_DONTWAIT);
     if (!ret) {
-        pr_err("send msg from kernel to usespace failed ret 0x%x\n", ret);
+        pr_debug("send msg from kernel to usespace failed ret 0x%x\n", ret);
     }
 }
 #else
@@ -79,7 +79,7 @@ void sendnlmsg(char *msg)
     }
 	skb_1 = alloc_skb(len, GFP_KERNEL);
 	if (!skb_1) {
-		pr_err("alloc_skb error\n");
+		pr_debug("alloc_skb error\n");
 		return;
 	}
 
@@ -95,7 +95,7 @@ void sendnlmsg(char *msg)
 
 	ret = netlink_unicast(nl_sk, skb_1, pid, MSG_DONTWAIT);
 	if (!ret) {
-		pr_err("send msg from kernel to usespace failed ret 0x%x\n", ret);
+		pr_debug("send msg from kernel to usespace failed ret 0x%x\n", ret);
 	}
 }
 #endif
@@ -135,7 +135,7 @@ int netlink_init(void)
 			&netlink_cfg);
 
 	if(!nl_sk){
-		pr_err("create netlink socket error\n");
+		pr_debug("create netlink socket error\n");
 		return 1;
 	}
 
@@ -149,6 +149,6 @@ void netlink_exit(void)
 		nl_sk = NULL;
 	}
 
-	pr_info("self module exited\n");
+	pr_debug("self module exited\n");
 }
 

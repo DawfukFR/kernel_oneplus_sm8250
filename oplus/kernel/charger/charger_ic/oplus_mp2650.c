@@ -215,7 +215,7 @@ static ssize_t mp2650_reg_access_store(struct device *dev,
     if (rc < 0)
         return rc;
 
-    pr_err("%s: value=%d\n", __FUNCTION__, val);
+    pr_debug("%s: value=%d\n", __FUNCTION__, val);
 	reg_access_allow = val;
 
 	return count;
@@ -241,7 +241,7 @@ static ssize_t mp2650_reg_set_store(struct device *dev,
     unsigned int databuf[2] = {0, 0};
 
     if(2 == sscanf(buf, "%x %x", &databuf[0], &databuf[1])) {
-        pr_err("%s: reg[0x%02x]=0x%02x\n", __FUNCTION__, databuf[0], databuf[1]);
+        pr_debug("%s: reg[0x%02x]=0x%02x\n", __FUNCTION__, databuf[0], databuf[1]);
 		mp2650_reg = databuf[0];
 		__tongfeng_test_mp2650_write_reg((int)databuf[0], (int)databuf[1]);
     }
@@ -2469,21 +2469,21 @@ static int rtc_reset_check(void)
 
     rtc = rtc_class_open(CONFIG_RTC_HCTOSYS_DEVICE);
     if (rtc == NULL) {
-        pr_err("%s: unable to open rtc device (%s)\n",
+        pr_debug("%s: unable to open rtc device (%s)\n",
         __FILE__, CONFIG_RTC_HCTOSYS_DEVICE);
         return 0;
     }
 
     rc = rtc_read_time(rtc, &tm);
     if (rc) {
-        pr_err("Error reading rtc device (%s) : %d\n",
+        pr_debug("Error reading rtc device (%s) : %d\n",
         CONFIG_RTC_HCTOSYS_DEVICE, rc);
         goto close_time;
     }
 
     rc = rtc_valid_tm(&tm);
     if (rc) {
-        pr_err("Invalid RTC time (%s): %d\n",
+        pr_debug("Invalid RTC time (%s): %d\n",
         CONFIG_RTC_HCTOSYS_DEVICE, rc);
         goto close_time;
     }
@@ -2734,16 +2734,16 @@ static int mp2650_gpio_init(struct chip_mp2650 *chip)
 	// Parsing gpio mps_otg_en
 	chip->mps_otg_en_gpio = of_get_named_gpio(node, "qcom,mps_otg_en-gpio", 0);
 	if(chip->mps_otg_en_gpio < 0 ) {
-		pr_err("chip->mps_otg_en_gpio not specified\n");
+		pr_debug("chip->mps_otg_en_gpio not specified\n");
 	} else {
 		if( gpio_is_valid(chip->mps_otg_en_gpio) ) {
 			rc = gpio_request(chip->mps_otg_en_gpio, "mps_otg_en-gpio");
 			if(rc){
-				pr_err("unable to request gpio [%d]\n", chip->mps_otg_en_gpio);
+				pr_debug("unable to request gpio [%d]\n", chip->mps_otg_en_gpio);
 			}
 		}
 		rc = mp2650_mps_otg_en_gpio_init(chip);
-		pr_err("chip->mps_otg_en_gpio =%d\n",chip->mps_otg_en_gpio);
+		pr_debug("chip->mps_otg_en_gpio =%d\n",chip->mps_otg_en_gpio);
 	}
 
 	chg_err(" mp2650_gpio_init FINISH\n");
@@ -2826,7 +2826,7 @@ static ssize_t mp2650_data_log_write(struct file *filp, const char __user *buff,
 	}
 
 	if (copy_from_user(&write_data, buff, len)) {
-		pr_err("mp2650_data_log_write error.\n");
+		pr_debug("mp2650_data_log_write error.\n");
 		return -EFAULT;
 	}
 
@@ -2840,7 +2840,7 @@ static ssize_t mp2650_data_log_write(struct file *filp, const char __user *buff,
 		critical_log = 256;
 	}
 
-	pr_err("%s: input data = %s,  write_mp2650_data = 0x%02X\n", __func__, write_data, critical_log);
+	pr_debug("%s: input data = %s,  write_mp2650_data = 0x%02X\n", __func__, write_data, critical_log);
 
 	rc = mp2650_config_interface(mp2650_add, critical_log, 0xff);
 	if (rc) {
@@ -2867,7 +2867,7 @@ static void init_mp2650_write_log(void)
 
 	p = proc_create("mp2650_write_log", 0664, NULL, &mp2650_write_log_proc_fops);
 	if (!p) {
-		pr_err("proc_create mp2650_write_log fail!\n");
+		pr_debug("proc_create mp2650_write_log fail!\n");
 	}
 }
 
@@ -2884,7 +2884,7 @@ static ssize_t mp2650_reg_store(struct file *filp, const char __user *buff, size
 	}
 
 	if (copy_from_user(&write_data, buff, len)) {
-		pr_err("mp2650_data_log_read error.\n");
+		pr_debug("mp2650_data_log_read error.\n");
 		return -EFAULT;
 	}
 
@@ -2900,7 +2900,7 @@ static ssize_t mp2650_reg_store(struct file *filp, const char __user *buff, size
 
 	mp2650_add = critical_log;
 
-	pr_err("%s: input data = %s,  mp2650_addr = 0x%02X\n", __func__, write_data, mp2650_add);
+	pr_debug("%s: input data = %s,  mp2650_addr = 0x%02X\n", __func__, write_data, mp2650_add);
 
 	rc = mp2650_read_reg(mp2650_add, &val_buf);
 	if (rc) {
@@ -2957,7 +2957,7 @@ static void init_mp2650_read_log(void)
 
 	p = proc_create("mp2650_read_log", 0664, NULL, &mp2650_read_log_proc_fops);
 	if (!p) {
-		pr_err("proc_create mp2650_read_log fail!\n");
+		pr_debug("proc_create mp2650_read_log fail!\n");
 	}
 }
 #endif /*DEBUG_BY_FILE_OPS*/

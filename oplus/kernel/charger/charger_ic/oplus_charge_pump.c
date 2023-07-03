@@ -457,7 +457,7 @@ static void charge_pump_chip_init(struct chip_charge_pump *chip)
 
     chip->charge_pump_hwid_gpio = of_get_named_gpio(node, "oplus,charge_pump-hwid-gpio", 0);
     if (chip->charge_pump_hwid_gpio < 0) {
-        pr_err("charge_pump_hwid_gpio not specified\n");
+        pr_debug("charge_pump_hwid_gpio not specified\n");
         goto HWID_HANDLE;
     }
 

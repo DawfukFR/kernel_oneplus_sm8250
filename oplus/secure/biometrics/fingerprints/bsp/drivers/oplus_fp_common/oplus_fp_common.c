@@ -69,7 +69,7 @@ static int get_manufacture_id_value(struct fp_data *fp_data)
     struct pinctrl_state *fp_id_pull_up = NULL;
     struct pinctrl_state *fp_id_pull_down = NULL;
 
-    dev_info(fp_data->dev, "get_manufacture_id_value in\n");
+    dev_dbg(fp_data->dev, "get_manufacture_id_value in\n");
 
     fp_id_pinctrl = devm_pinctrl_get(fp_data->dev);
     if (IS_ERR_OR_NULL(fp_id_pinctrl)) {
@@ -101,7 +101,7 @@ static int get_manufacture_id_value(struct fp_data *fp_data)
         goto exit;
     }
     fp_id_value_up = gpio_get_value(fp_id_gpio); //first get fp_id
-    dev_info(fp_data->dev, "fp_id_value_up%d\n", fp_id_value_up);
+    dev_dbg(fp_data->dev, "fp_id_value_up%d\n", fp_id_value_up);
 
     ret = pinctrl_select_state(fp_id_pinctrl, fp_id_pull_down);
     if (ret) {
@@ -109,7 +109,7 @@ static int get_manufacture_id_value(struct fp_data *fp_data)
         goto exit;
     }
     fp_id_value_down = gpio_get_value(fp_id_gpio); //second get fp_id
-    dev_info(fp_data->dev, "fp_id_value_down%d\n", fp_id_value_down);
+    dev_dbg(fp_data->dev, "fp_id_value_down%d\n", fp_id_value_down);
 
     /*************************************
     *    fp id define:
@@ -119,13 +119,13 @@ static int get_manufacture_id_value(struct fp_data *fp_data)
     *************************************/
     if (fp_id_value_up == 1 && fp_id_value_down == 0) {
         fp_data->fp_id[0] = 1;
-        dev_info(fp_data->dev, "fp_id: %d ->goodix\n", fp_data->fp_id[0]);
+        dev_dbg(fp_data->dev, "fp_id: %d ->goodix\n", fp_data->fp_id[0]);
     } else if (fp_id_value_up == 0 && fp_id_value_down == 0) {
         fp_data->fp_id[0] = 0;
-        dev_info(fp_data->dev, "fp_id: %d ->fpc\n", fp_data->fp_id[0]);
+        dev_dbg(fp_data->dev, "fp_id: %d ->fpc\n", fp_data->fp_id[0]);
     } else if (fp_id_value_up == 1 && fp_id_value_down == 1) {
         fp_data->fp_id[0] = 2;
-        dev_info(fp_data->dev, "fp_id: %d ->silead\n", fp_data->fp_id[0]);
+        dev_dbg(fp_data->dev, "fp_id: %d ->silead\n", fp_data->fp_id[0]);
     } else {
         dev_err(fp_data->dev, "fp_id not define, default is 0", ret);
     }
@@ -166,7 +166,7 @@ static int fp_gpio_parse_parent_dts(struct fp_data *fp_data)
         goto exit;
     }
 
-    dev_info(fp_data->dev, "fp_id_amount: %d\n", fp_data->fp_id_amount);
+    dev_dbg(fp_data->dev, "fp_id_amount: %d\n", fp_data->fp_id_amount);
 
     ret = of_property_read_u32(np, "oplus,one_gpio_for_three_ic", &one_for_three);
     if (ret) {
@@ -178,7 +178,7 @@ static int fp_gpio_parse_parent_dts(struct fp_data *fp_data)
         if (ret) {
             dev_err(fp_data->dev, "get_manufacture_id_value failed\n");
         } else {
-            dev_info(fp_data->dev, "get_manufacture_id_value success fp_id: %d\n", fp_data->fp_id[0]);
+            dev_dbg(fp_data->dev, "get_manufacture_id_value success fp_id: %d\n", fp_data->fp_id[0]);
         }
         goto exit;
     }
@@ -186,7 +186,7 @@ static int fp_gpio_parse_parent_dts(struct fp_data *fp_data)
         for (fp_id_index = 0; fp_id_index < fp_data->fp_id_amount; fp_id_index++) {
             char fp_gpio_current_node[FP_ID_MAX_LENGTH] = {0};
             snprintf(fp_gpio_current_node, FP_ID_MAX_LENGTH - 1, "%s%d", FP_GPIO_PREFIX_NODE, fp_id_index);
-            dev_info(fp_data->dev, "fp_gpio_current_node: %s\n", fp_gpio_current_node);
+            dev_dbg(fp_data->dev, "fp_gpio_current_node: %s\n", fp_gpio_current_node);
             fp_data->gpio_index[fp_id_index] = of_get_named_gpio(np, fp_gpio_current_node, 0);
             if (fp_data->gpio_index[fp_id_index] < 0) {
                 dev_err(fp_data->dev, "the param %s is not found !\n", fp_gpio_current_node);
@@ -194,7 +194,7 @@ static int fp_gpio_parse_parent_dts(struct fp_data *fp_data)
                 goto exit;
             }
             fp_data->fp_id[fp_id_index] = gpio_get_value(fp_data->gpio_index[fp_id_index]);
-            dev_info(fp_data->dev, "gpio_index: %d,fp_id: %d\n", fp_data->gpio_index[fp_id_index], fp_data->fp_id[fp_id_index]);
+            dev_dbg(fp_data->dev, "gpio_index: %d,fp_id: %d\n", fp_data->gpio_index[fp_id_index], fp_data->fp_id[fp_id_index]);
         }
     }
 exit:
@@ -239,7 +239,7 @@ static ssize_t fp_id_node_write(struct file *file, const char __user *buf, size_
         return -EFAULT;
     }
     fp_manu[local_count] = '\0';
-    dev_info(fp_data_ptr->dev, "write fp manu = %s\n", fp_manu);
+    dev_dbg(fp_data_ptr->dev, "write fp manu = %s\n", fp_manu);
     return count;
 }
 
@@ -260,7 +260,7 @@ void opticalfp_irq_handler_register(opticalfp_handler handler) {
         }
         mutex_unlock(&opticalfp_handler_lock);
     } else {
-        pr_err("%s handler is NULL", __func__);
+        pr_debug("%s handler is NULL", __func__);
     }
 }
 
@@ -352,7 +352,7 @@ static int fp_gpio_parse_child_dts(struct fp_data *fp_data)
             fp_data->fpsensor_type = (fp_vendor_t)fpsensor_type;
             strncpy(fp_manu, chip_name, FP_ID_MAX_LENGTH - 1);
             strncpy(g_engineermode_menu_config, eng_menu, ENGINEER_MENU_SELECT_MAXLENTH - 1);
-            dev_info(dev, "fpsensor_type: %d, chip_name: %s, eng_menu: %s\n", fp_data->fpsensor_type, chip_name, eng_menu);
+            dev_dbg(dev, "fpsensor_type: %d, chip_name: %s, eng_menu: %s\n", fp_data->fpsensor_type, chip_name, eng_menu);
             break;
         }
     }
@@ -491,7 +491,7 @@ fp_vendor_t get_fpsensor_type(void)
     fp_vendor_t fpsensor_type = FP_UNKNOWN;
 
     if (NULL == fp_data_ptr) {
-        pr_err("%s no device", __func__);
+        pr_debug("%s no device", __func__);
         return FP_UNKNOWN;
     }
 
@@ -505,7 +505,7 @@ static int oplus_fp_common_probe(struct platform_device *fp_dev)
     int ret = 0;
     struct device *dev = &fp_dev->dev;
     struct fp_data *fp_data = NULL;
-    pr_err("%s enter", __func__);
+    pr_debug("%s enter", __func__);
     fp_data = devm_kzalloc(dev, sizeof(struct fp_data), GFP_KERNEL);
     if (fp_data == NULL) {
         dev_err(dev, "fp_data kzalloc failed\n");
@@ -549,7 +549,7 @@ static int oplus_fp_common_probe(struct platform_device *fp_dev)
     set_fp_driver_event_type(FP_DRIVER_INTERRUPT); // gki
 #endif
     (void)fp_event_register_proc_fs();
-    pr_err("%s exit", __func__);
+    pr_debug("%s exit", __func__);
     return FP_OK;
 
 exit:
@@ -592,13 +592,13 @@ static struct platform_driver oplus_fp_common_driver = {
 
 static int __init oplus_fp_common_init(void)
 {
-    pr_err("%s enter", __func__);
+    pr_debug("%s enter", __func__);
     return platform_driver_register(&oplus_fp_common_driver);
 }
 
 static void __exit oplus_fp_common_exit(void)
 {
-    pr_err("%s enter", __func__);
+    pr_debug("%s enter", __func__);
     platform_driver_unregister(&oplus_fp_common_driver);
 }
 
