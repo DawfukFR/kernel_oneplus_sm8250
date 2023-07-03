@@ -140,6 +140,11 @@ static inline bool fscrypt_is_bounce_page(struct page *page)
 	return page->mapping == NULL;
 }
 
+static inline bool fscrypt_is_nokey_name(const struct dentry *dentry)
+{
+	return dentry->d_flags & DCACHE_ENCRYPTED_NAME;
+}
+
 static inline struct page *fscrypt_pagecache_page(struct page *bounce_page)
 {
 	return (struct page *)page_private(bounce_page);
