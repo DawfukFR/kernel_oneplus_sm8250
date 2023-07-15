@@ -136,8 +136,13 @@ all.config
 # fetched Android config fragments
 kernel/configs/android-*.cfg
 
-# Ignore build script
-build.sh
+# Ignore output dir
+/out
 
-# Ignore out directory
-out/
+# Ignore personnal stuff
+/error.log
+/clang
+/clangB
+/gcc64
+/gcc32
+/gcc
