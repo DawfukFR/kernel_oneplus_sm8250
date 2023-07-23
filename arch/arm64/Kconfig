@@ -1172,7 +1172,7 @@ config ARM64_TAGGED_ADDR_ABI
 	  Documentation/arm64/tagged-address-abi.rst.
 
 config COMPAT_VDSO
-	bool "Enable vDSO for 32-bit applications"
+	bool
 	depends on !CPU_BIG_ENDIAN && "$(CROSS_COMPILE_COMPAT)" != ""
 	select GENERIC_COMPAT_VDSO
 	default y
