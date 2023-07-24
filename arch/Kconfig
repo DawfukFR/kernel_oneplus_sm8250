@@ -489,7 +489,7 @@ config STACKPROTECTOR_STRONG
 	  size by about 2%.
 
 config LTO
-	def_bool n
+	def_bool y
 
 config ARCH_SUPPORTS_LTO_CLANG
 	bool
@@ -505,23 +505,19 @@ config ARCH_SUPPORTS_THINLTO
 	  An architecture should select this if it supports clang's ThinLTO.
 
 config THINLTO
-	bool "Use clang ThinLTO (EXPERIMENTAL)"
+	bool
 	depends on LTO_CLANG && ARCH_SUPPORTS_THINLTO
 	default y
 	help
 	  Use ThinLTO to speed up Link Time Optimization.
 
-choice
-	prompt "Link-Time Optimization (LTO) (EXPERIMENTAL)"
-	default LTO_NONE
-	help
-	  This option turns on Link-Time Optimization (LTO).
-
 config LTO_NONE
-	bool "None"
+	bool
+	default n
 
 config LTO_CLANG
-	bool "Use clang Link Time Optimization (LTO) (EXPERIMENTAL)"
+	bool
+	default y
 	depends on ARCH_SUPPORTS_LTO_CLANG
 	depends on !FTRACE_MCOUNT_RECORD || HAVE_C_RECORDMCOUNT
 	depends on !KASAN
@@ -537,13 +533,12 @@ config LTO_CLANG
           If you select this option, you must compile the kernel with clang and
 	  LLD.
 
-endchoice
-
 config CFI
 	bool
 
 config CFI_PERMISSIVE
-	bool "Use CFI in permissive mode"
+	bool
+	default n
 	depends on CFI
 	help
 	  When selected, Control Flow Integrity (CFI) violations result in a
@@ -551,7 +546,8 @@ config CFI_PERMISSIVE
 	  CFI violations in drivers during development.
 
 config CFI_CLANG
-	bool "Use clang Control Flow Integrity (CFI) (EXPERIMENTAL)"
+	bool
+	default n	
 	depends on LTO_CLANG
 	depends on KALLSYMS
 	select CFI
@@ -560,8 +556,8 @@ config CFI_CLANG
 	  runtime checking for indirect function calls.
 
 config CFI_CLANG_SHADOW
-	bool "Use CFI shadow to speed up cross-module checks"
-	default y
+	bool
+	default n
 	depends on CFI_CLANG
 	help
 	  If you select this option, the kernel builds a fast look-up table of
