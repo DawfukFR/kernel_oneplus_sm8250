@@ -1023,7 +1023,7 @@ config ARCH_HAS_RELR
 config RELR
 	bool
 	depends on ARCH_HAS_RELR && TOOLS_SUPPORT_RELR
-	default y
+	default n
 	help
 	  Store the kernel's dynamic relocations in the RELR relocation packing
 	  format. Requires a compatible linker (LLD supports this feature), as
