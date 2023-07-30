@@ -118,7 +118,7 @@ config MAC_PARTITION
 
 config MSDOS_PARTITION
 	bool "PC BIOS (MSDOS partition tables) support" if PARTITION_ADVANCED
-	default y
+	default n
 	help
 	  Say Y here.
 
@@ -247,7 +247,7 @@ config KARMA_PARTITION
 
 config EFI_PARTITION
 	bool "EFI GUID Partition support" if PARTITION_ADVANCED
-	default y
+	default n
 	select CRC32
 	help
 	  Say Y here if you would like to use hard disks under Linux which
