@@ -2216,9 +2216,11 @@ static void fill_extnum_info(struct elfhdr *elf, struct elf_shdr *shdr4extnum,
 
 
 #ifdef OPLUS_BUG_STABILITY
+#ifdef CONFIG_COREDUMP
 static elf_addr_t *oplus_coredump_addr = NULL;
 #define PREALLOC_DUMPMEM_SIZE 64 * 1024
 #endif /* OPLUS_BUG_STABILITY */
+#endif /* CONFIG_COREDUMP */
 
 static DEFINE_MUTEX(core_dump_mutex);
 
@@ -2317,6 +2319,7 @@ static int elf_core_dump(struct coredump_params *cprm)
 		goto end_coredump;
 
 #ifdef OPLUS_BUG_STABILITY
+#ifdef CONFIG_COREDUMP
 	if (oplus_coredump_addr && (segs - 1) * sizeof(*vma_filesz) <= PREALLOC_DUMPMEM_SIZE)
 		vma_filesz = oplus_coredump_addr;
 	else {
@@ -2329,6 +2332,7 @@ static int elf_core_dump(struct coredump_params *cprm)
 	vma_filesz = kvmalloc(array_size(sizeof(*vma_filesz), (segs - 1)),
 			      GFP_KERNEL);
 #endif /* OPLUS_BUG_STABILITY */
+#endif /* CONFIG_COREDUMP */
 
 	if (ZERO_OR_NULL_PTR(vma_filesz))
 		goto end_coredump;
@@ -2439,9 +2443,11 @@ cleanup:
 	kfree(shdr4extnum);
 	kvfree(vma_filesz);
 #ifdef OPLUS_BUG_STABILITY
+#ifdef CONFIG_COREDUMP
 	if (vma_filesz == oplus_coredump_addr)
 		oplus_coredump_addr = NULL;
 #endif /* OPLUS_BUG_STABILITY */
+#endif /* CONFIG_COREDUMP */
 	kfree(phdr4note);
 	kfree(elf);
 out:
@@ -2456,8 +2462,10 @@ static int __init init_elf_binfmt(void)
 	register_binfmt(&elf_format);
 
 #ifdef OPLUS_BUG_STABILITY
+#ifdef CONFIG_COREDUMP
 	oplus_coredump_addr = kvmalloc(PREALLOC_DUMPMEM_SIZE, GFP_KERNEL);
 #endif /* OPLUS_BUG_STABILITY */
+#endif /* CONFIG_COREDUMP */
 
 	return 0;
 }
@@ -2465,9 +2473,11 @@ static int __init init_elf_binfmt(void)
 static void __exit exit_elf_binfmt(void)
 {
 #ifdef OPLUS_BUG_STABILITY
+#ifdef CONFIG_COREDUMP
 	if (oplus_coredump_addr)
 		kvfree(oplus_coredump_addr);
 #endif /* OPLUS_BUG_STABILITY */
+#endif /* CONFIG_COREDUMP */
 
 	/* Remove the COFF and ELF loaders. */
 	unregister_binfmt(&elf_format);
